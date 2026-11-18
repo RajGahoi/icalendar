@@ -178,7 +178,7 @@ class Todo(Component):
         """The date and time that a to-do was actually completed, per :rfc:`5545#section-3.8.2.1`.
 
     This property defines the date and time that a to-do was actually completed.
-    The property can be specified in a "VTODO" calendar component. The value
+    The property can be specified in a VTODO calendar component. The value
     MUST be specified as a date with UTC time.
 
     Returns ``None`` when the to-do has not been marked as completed.
@@ -196,7 +196,7 @@ class Todo(Component):
             datetime.datetime(2007, 5, 1, 12, 0, tzinfo=ZoneInfo(key='UTC'))
 
     See also:
-        :attr:`STATUS`
+        :attr:`status`
     """,
     )
 
