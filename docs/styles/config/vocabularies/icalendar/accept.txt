@@ -9,7 +9,6 @@ defusedxml
 dicts
 [Dd]ocstrings?
 fuzzer
-Hacktoberfest
 Hanoka
 icalendar(\.[a-z]+)+
 iCal

@@ -7,6 +7,7 @@ from icalendar.compatibility import Self
 from icalendar.error import JCalParsingError
 from icalendar.parser import Parameters
 from icalendar.parser.xcal.base import XCalParser
+from icalendar.parser.xcal.string import _to_valid_xml_string
 from icalendar.parser.xcal.wrapper import from_xcal_wrapper
 from icalendar.parser_tools import DEFAULT_ENCODING, to_unicode
 
@@ -169,6 +170,42 @@ class vCalAddress(str):
         if self.lower().startswith("mailto:"):
             return self[7:]
         return str(self)
+
+    def has_email(self, email: str) -> bool:
+        """Check whether an email matches this calendar user.
+
+        The email can match either the calendar address or its ``EMAIL``
+        parameter.
+        Comparison ignores case and an optional ``mailto:`` prefix on either
+        address. This method does not validate email syntax.
+
+        Parameters:
+            email: Required. The address to compare, with or without ``mailto:``.
+
+        Returns:
+            bool: ``True`` if either address matches, otherwise ``False``.
+
+        Examples:
+            .. code-block:: pycon
+
+                >>> from icalendar import vCalAddress
+                >>> attendee = vCalAddress("mailto:calendar@example.com")
+                >>> attendee.EMAIL = "contact@example.com"
+                >>> attendee.has_email("CALENDAR@example.com")
+                True
+                >>> attendee.has_email("mailto:contact@example.com")
+                True
+                >>> attendee.has_email("other@example.com")
+                False
+
+        .. versionadded:: 0.0.0
+        """
+        normalized = email.casefold().removeprefix("mailto:")
+        return any(
+            address is not None
+            and address.casefold().removeprefix("mailto:") == normalized
+            for address in (self.ical_value, self.EMAIL)
+        )
 
     from icalendar.param import (
         CN,
@@ -372,7 +409,7 @@ class vCalAddress(str):
         """The xCal representation of this property according to :rfc:`6321`."""
         self.params.to_xcal(element)
         element = SubElement(element, "cal-address")
-        element.text = self.ical_value
+        element.text = _to_valid_xml_string(self.ical_value)
 
 
 __all__ = ["vCalAddress"]
