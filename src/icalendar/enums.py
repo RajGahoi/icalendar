@@ -1,6 +1,14 @@
 """Enumerations for different types in the RFCs."""
 
+from __future__ import annotations
+
 from enum import Enum as _Enum
+from typing import TYPE_CHECKING, TypeVar, overload
+
+if TYPE_CHECKING:
+    from icalendar.compatibility import Self
+
+T = TypeVar("T")
 
 
 class Enum(_Enum):
@@ -14,6 +22,8 @@ class Enum(_Enum):
 class StrEnum(str, Enum):
     """Enum for strings."""
 
+    _value_: str
+
     def __str__(self) -> str:
         """Convert to a string.
 
@@ -21,34 +31,99 @@ class StrEnum(str, Enum):
         """
         return self.value
 
+    @overload
+    @classmethod
+    def get(cls, value: str) -> Self | None: ...
 
-class PARTSTAT(StrEnum):
-    """Enum for PARTSTAT from :rfc:`5545`.
+    @overload
+    @classmethod
+    def get(cls, value: str, default: T) -> Self | T: ...
 
-    Values:
-        ``NEEDS_ACTION``,
-        ``ACCEPTED``,
-        ``DECLINED``,
-        ``TENTATIVE``,
-        ``DELEGATED``,
-        ``COMPLETED``,
-        ``IN_PROCESS``
+    @classmethod
+    def get(cls, value: str, default: T | None = None) -> Self | T | None:
+        """Return the member with the given value, or a default.
 
-    Purpose:
-        To specify the participation status for the calendar user
-        specified by the property.
+        Unlike calling the enum directly, as in ``PARTSTAT("no-value")``, it does
+        not raise a :class:`ValueError` for an unknown value. The lookup is
+        case-insensitive.
+
+        Parameters:
+            value: Required. Value to look up.
+            default: Optional value to return in case ``value`` is not found.
+
+        Returns:
+            The member with that value, or ``default`` if there is none.
+
+        Example:
+            This example shows how to use this method.
+
+            .. code-block:: pycon
+
+                >>> from icalendar import PARTSTAT
+                >>> PARTSTAT.get("ACCEPTED")
+                <PARTSTAT.ACCEPTED: 'ACCEPTED'>
+                >>> PARTSTAT.get("accepted")
+                <PARTSTAT.ACCEPTED: 'ACCEPTED'>
+                >>> print(PARTSTAT.get("invalid-value"))
+                None
+                >>> print(PARTSTAT.get("invalid-value", "No value given"))
+                No value given
+                >>> print(PARTSTAT.get("ACCEPTED", "No value given"))
+                ACCEPTED
+
+        """
+        try:
+            return cls(value.upper())
+        except ValueError:
+            return default
+
+
+class ACTION(StrEnum):
+    """Enum for ACTION on an :class:`~icalendar.cal.alarm.Alarm`.
 
     Description:
-        This parameter can be specified on properties with a
-        CAL-ADDRESS value type.  The parameter identifies the
-        participation status for the calendar user specified by the
-        property value.  The parameter values differ depending on whether
-        they are associated with a group-scheduled "VEVENT", "VTODO", or
-        "VJOURNAL".  The values MUST match one of the values allowed for
-        the given calendar component.  If not specified on a property that
-        allows this parameter, the default value is NEEDS-ACTION.
-        Applications MUST treat x-name and iana-token values they don't
-        recognize the same way as they would the NEEDS-ACTION value.
+        Values are defined by :rfc:`5545#section-3.8.6.1` and identify the
+        notification performed when an alarm is triggered.
+    """
+
+    AUDIO = "AUDIO"
+    DISPLAY = "DISPLAY"
+    EMAIL = "EMAIL"
+
+
+class PARTSTAT(StrEnum):
+    """Enum for PARTSTAT from :rfc:`5545`, extended by :rfc:`10051#section-9.1`.
+
+    This parameter can be specified in
+    :attr:`~icalendar.prop.cal_address.vCalAddress.PARTSTAT`. The parameter
+    identifies the participation status for the calendar user specified by the
+    property value. The parameter values differ depending on whether they are
+    associated with a group-scheduled :class:`~icalendar.cal.event.Event`,
+    :class:`~icalendar.cal.todo.Todo`, or
+    :class:`~icalendar.cal.journal.Journal` calendar component. The values MUST
+    match one of the values allowed for the given calendar component. If not
+    specified on a property that allows this parameter, the default value is
+    :attr:`NEEDS_ACTION`. Applications MUST treat x-name and iana-token values
+    they don't recognize the same way as they would the :attr:`NEEDS_ACTION`
+    value.
+
+    ..  version-changed:: 0.0.0
+
+        Added :attr:`FAILED` according to :rfc:`10051#section-9.1` for a
+        participant who can't complete a task in a
+        :class:`~icalendar.cal.todo.Todo` calendar component.
+
+    Possible values are the following.
+
+    -   :attr:`NEEDS_ACTION`
+    -   :attr:`ACCEPTED`
+    -   :attr:`DECLINED`
+    -   :attr:`TENTATIVE`
+    -   :attr:`DELEGATED`
+    -   :attr:`COMPLETED`
+    -   :attr:`IN_PROCESS`
+    -   :attr:`FAILED`
+
     """
 
     NEEDS_ACTION = "NEEDS-ACTION"
@@ -58,38 +133,46 @@ class PARTSTAT(StrEnum):
     DELEGATED = "DELEGATED"
     COMPLETED = "COMPLETED"
     IN_PROCESS = "IN-PROCESS"
+    FAILED = "FAILED"
 
 
 class STATUS(StrEnum):
-    """Enum for STATUS from :rfc:`5545`.
+    r"""Enum for STATUS from :rfc:`5545`, extended by :rfc:`10051#section-11.2`.
 
-    Values for :class:`icalendar.cal.event.Event`:
-        ``CONFIRMED``,
-        ``TENTATIVE``,
-        ``CANCELLED``
+    In a group-scheduled calendar component, this property is used by the
+    Organizer to provide information about the status of an
+    :class:`~icalendar.cal.event.Event`, :class:`~icalendar.cal.todo.Todo`, or
+    :class:`~icalendar.cal.journal.Journal`.
 
-    Values for :class:`icalendar.cal.todo.Todo`:
-        ``NEEDS_ACTION``,
-        ``COMPLETED``,
-        ``IN_PROCESS``,
-        ``CANCELLED``
+    ..  version-changed:: 0.0.0
 
-    Values for :class:`icalendar.cal.journal.Journal`:
-        ``DRAFT``,
-        ``FINAL``,
-        ``CANCELLED``
+        Added two task statuses according to :rfc:`10051#section-11.2`\ :
+        :attr:`PENDING` for a task that has been accepted but has not started,
+        and :attr:`FAILED` for a task that has failed.
 
-    Description:
-        In a group-scheduled calendar component, the property
-        is used by the "Organizer" to provide a confirmation of the event
-        to the "Attendees".  For example in a "VEVENT" calendar component,
-        the "Organizer" can indicate that a meeting is tentative,
-        confirmed, or cancelled.  In a "VTODO" calendar component, the
-        "Organizer" can indicate that an action item needs action, is
-        completed, is in process or being worked on, or has been
-        cancelled.  In a "VJOURNAL" calendar component, the "Organizer"
-        can indicate that a journal entry is draft, final, or has been
-        cancelled or removed.
+    Possible values for :class:`~icalendar.cal.event.Event` include the
+    following:
+
+    -   :attr:`CONFIRMED`
+    -   :attr:`TENTATIVE`
+    -   :attr:`CANCELLED`
+
+    Possible values for :class:`~icalendar.cal.todo.Todo` include the
+    following:
+
+    -   :attr:`NEEDS_ACTION`
+    -   :attr:`COMPLETED`
+    -   :attr:`IN_PROCESS`
+    -   :attr:`CANCELLED`
+    -   :attr:`PENDING`
+    -   :attr:`FAILED`
+
+    Possible values for :class:`~icalendar.cal.journal.Journal` include the
+    following:
+
+    -   :attr:`DRAFT`
+    -   :attr:`FINAL`
+    -   :attr:`CANCELLED`
     """
 
     # Event
@@ -101,6 +184,8 @@ class STATUS(StrEnum):
     NEEDS_ACTION = "NEEDS-ACTION"
     COMPLETED = "COMPLETED"
     IN_PROCESS = "IN-PROCESS"
+    PENDING = "PENDING"
+    FAILED = "FAILED"
     # CANCELLED
 
     # Journal
@@ -494,6 +579,7 @@ class TRANSP(StrEnum):
 
 
 __all__ = [
+    "ACTION",
     "BUSYTYPE",
     "CLASS",
     "CUTYPE",

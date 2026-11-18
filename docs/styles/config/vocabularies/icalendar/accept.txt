@@ -9,7 +9,6 @@ defusedxml
 dicts
 [Dd]ocstrings?
 fuzzer
-Hacktoberfest
 Hanoka
 icalendar(\.[a-z]+)+
 iCal
@@ -22,6 +21,7 @@ Nicco
 Params
 Penner
 (?i)Plone
+prek
 Python
 python\-icalendar
 Repology

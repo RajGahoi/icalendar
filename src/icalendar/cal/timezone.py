@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import date, datetime, timedelta, tzinfo
-from typing import TYPE_CHECKING
 
 import dateutil.rrule
 import dateutil.tz
@@ -22,15 +21,25 @@ from icalendar.timezone import TZP, tzp
 from icalendar.timezone.tzid import tzid_from_tzinfo
 from icalendar.tools import to_datetime
 
-if TYPE_CHECKING:
-    from icalendar.cal import Calendar
-
 
 class Timezone(Component):
     """
     A "VTIMEZONE" calendar component is a grouping of component
     properties that defines a time zone. It is used to describe the
     way in which a time zone changes its offset from UTC over time.
+
+    Examples:
+        Get the example Timezone.
+
+        .. code-block:: pycon
+
+            >>> from icalendar import Timezone
+            >>> timezone = Timezone.example()
+            >>> print(timezone["TZID"])
+            custom_Pacific/Fiji
+            >>> len(timezone.subcomponents)
+            5
+
     """
 
     subcomponents: list[TimezoneStandard | TimezoneDaylight]
@@ -48,15 +57,31 @@ class Timezone(Component):
     DEFAULT_LAST_DATE = date(2038, 1, 1)
 
     @classmethod
-    def example(cls, name: str = "pacific_fiji") -> Calendar:
-        """Return the timezone example with the given name."""
+    def example(cls, name: str = "pacific_fiji") -> Timezone:
+        """Return the timezone example with the given name.
+
+        Example:
+
+            .. code-block:: pycon
+
+                >>> from icalendar import Timezone
+                >>> timezone = Timezone.example()
+                >>> print(timezone["TZID"])
+                custom_Pacific/Fiji
+        """
         return cls.from_ical(get_example("timezones", name))
 
     @staticmethod
     def _extract_offsets(component: TimezoneDaylight | TimezoneStandard, tzname: str):
-        """extract offsets and transition times from a VTIMEZONE component
-        :param component: a STANDARD or DAYLIGHT component
-        :param tzname: the name of the zone
+        """Extract offsets and transition times from a VTIMEZONE component.
+
+        Args:
+            component: A STANDARD or DAYLIGHT timezone component.
+            tzname: The name of the timezone.
+
+        Returns:
+            A tuple containing whether the component represents daylight saving
+            time and its transition information.
         """
         offsetfrom = component.TZOFFSETFROM
         offsetto = component.TZOFFSETTO
@@ -107,10 +132,27 @@ class Timezone(Component):
         return is_dst, transitions
 
     @staticmethod
-    def _make_unique_tzname(tzname, tznames):
-        """
-        :param tzname: Candidate tzname
-        :param tznames: Other tznames
+    def _make_unique_tzname(tzname: str, tznames: set[str]) -> str:
+        """Make a unique tzname and add it to ``tznames``.
+
+        Parameters:
+            tzname: The candidate timezone name.
+            tznames: The timezone names already in use.
+
+        Returns:
+            The unique timezone name.
+
+        Example:
+            .. code-block:: pycon
+
+                >>> from icalendar import Timezone
+                >>> names = {"EST"}
+                >>> Timezone._make_unique_tzname("EST", names)
+                'EST_1'
+                >>> Timezone._make_unique_tzname("EST", names)
+                'EST_1_1'
+                >>> sorted(names)
+                ['EST', 'EST_1', 'EST_1_1']
         """
         # TODO better way of making sure tznames are unique
         while tzname in tznames:
@@ -119,14 +161,18 @@ class Timezone(Component):
         return tzname
 
     def to_tz(self, tzp: TZP = tzp, lookup_tzid: bool = True):
-        """convert this VTIMEZONE component to a timezone object
+        """Convert this VTIMEZONE component to a timezone object.
 
-        :param tzp: timezone provider to use
-        :param lookup_tzid: whether to use the TZID property to look up existing
-                            timezone definitions with tzp.
-                            If it is False, a new timezone will be created.
-                            If it is True, the existing timezone will be used
-                            if it exists, otherwise a new timezone will be created.
+        Parameters:
+            tzp: Timezone provider to use.
+            lookup_tzid: Whether to use the TZID property to look up existing
+                timezone definitions with ``tzp``. If ``True``, the existing
+                timezone is used if it exists; otherwise a new timezone is
+                created. If ``False``, a new timezone is always created.
+
+        Returns:
+            A timezone object, either looked up from ``tzp`` or newly created
+            from this component.
         """
         if lookup_tzid:
             tz = tzp.timezone(self.tz_name)
@@ -242,16 +288,21 @@ class Timezone(Component):
     ) -> Timezone:
         """Return a VTIMEZONE component from a timezone object.
 
-        This works with pytz and zoneinfo and any other timezone.
-        The offsets are calculated from the tzinfo object.
+        Calculate offsets from a pytz, zoneinfo, or other timezone object.
 
         Parameters:
+            timezone: Required. The timezone object used to calculate transitions.
+            first_date: The starting date for the transition search.
+            last_date: The ending date for the transition search.
+            tzid: The timezone identifier. If None, derive it from
+                ``timezone``.
 
-        :param tzinfo: the timezone object
-        :param tzid: the tzid for this timezone. If None, it will be extracted from the tzinfo.
-        :param first_date: a datetime that is earlier than anything that happens in the calendar
-        :param last_date: a datetime that is later than anything that happens in the calendar
-        :raises ValueError: If we have no tzid and cannot extract one.
+        Returns:
+            :class:`Timezone`: The ``VTIMEZONE`` component for ``timezone``.
+
+        Raises:
+            ValueError: If ``tzid`` is None and cannot be derived from
+                ``timezone``.
 
         .. note::
             This can take some time. Please cache the results.
@@ -333,21 +384,28 @@ class Timezone(Component):
         first_date: date = DEFAULT_FIRST_DATE,
         last_date: date = DEFAULT_LAST_DATE,
     ) -> Timezone:
-        """Create a VTIMEZONE from a tzid like ``"Europe/Berlin"``.
+        """Create a VTIMEZONE from a tzid, such as ``"Europe/Berlin"``.
 
-        :param tzid: the id of the timezone
-        :param tzp: the timezone provider
-        :param first_date: a datetime that is earlier than anything
-            that happens in the calendar
-        :param last_date: a datetime that is later than anything
-            that happens in the calendar
-        :raises ValueError: If the tzid is unknown.
+        Parameters:
+            tzid: The ID of the timezone.
+            tzp: The timezone provider.
+            first_date: A date that is earlier than anything that happens in the calendar.
+            last_date: A date that is later than anything that happens in the calendar.
 
-        >>> from icalendar import Timezone
-        >>> tz = Timezone.from_tzid("Europe/Berlin")
-        >>> print(tz.to_ical()[:36])
-        BEGIN:VTIMEZONE
-        TZID:Europe/Berlin
+        Returns:
+            A VTIMEZONE component for the given tzid.
+
+        Raises:
+            ValueError: If the tzid is unknown.
+
+        Example:
+            .. code-block:: pycon
+
+                >>> from icalendar import Timezone
+                >>> tz = Timezone.from_tzid("Europe/Berlin")
+                >>> print(tz.to_ical()[:36])
+                BEGIN:VTIMEZONE
+                TZID:Europe/Berlin
 
         .. note::
             This can take some time. Please cache the results.

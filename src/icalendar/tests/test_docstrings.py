@@ -3,7 +3,7 @@
 It may be amended as needed.
 ``KNOWN_BAD_HEADINGS`` is a set of known bad headings.
 As docstrings are fixed, their headings may be removed from this set.
-See https://github.com/collective/icalendar/issues/1481
+See https://github.com/PyCalendar/icalendar/issues/1481
 """
 
 import inspect
@@ -32,6 +32,7 @@ ALLOWED_HEADINGS = {
 }
 
 KNOWN_BAD_HEADINGS = {
+    "ACTION",
     "Availability",
     "Available",
     "BUSYTYPE",
@@ -44,13 +45,11 @@ KNOWN_BAD_HEADINGS = {
     "FreeBusy",
     "Image",
     "Journal",
-    "PARTSTAT",
     "Parameters",
     "RANGE",
     "RELATED",
     "RELTYPE",
     "ROLE",
-    "STATUS",
     "TRANSP",
     "Todo",
     "VALUE",
