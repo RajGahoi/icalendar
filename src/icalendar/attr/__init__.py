@@ -113,7 +113,7 @@ def _get_rdates(
         ``rdates`` for the relevant component or use
         :meth:`Component.add <icalendar.cal.component.Component.add>` instead.
         If you want to compute recurrences, have a look at
-        `Related Projects <https://github.com/collective/icalendar/blob/main/README.rst#related-projects>`_.
+        `Related Projects <https://github.com/PyCalendar/icalendar/blob/main/README.rst#related-projects>`_.
 
     """
     result = []
@@ -220,7 +220,7 @@ def _get_exdates(self: Component) -> list[date | datetime]:
         ``exdates`` for the relevant component or use
         :meth:`Component.add <icalendar.cal.component.Component.add>` instead.
         If you want to compute recurrences, have a look at
-        `Related Projects <https://github.com/collective/icalendar/blob/main/README.rst#related-projects>`_.
+        `Related Projects <https://github.com/PyCalendar/icalendar/blob/main/README.rst#related-projects>`_.
 
     """
     result = []
@@ -355,7 +355,7 @@ def _get_rrules(self: Component) -> list[vRecur]:
         Use :meth:`Component.add <icalendar.cal.component.Component.add>` to add values.
 
         If you want to compute recurrences, have a look at
-        `Related Projects <https://github.com/collective/icalendar/blob/main/README.rst#related-projects>`_.
+        `Related Projects <https://github.com/PyCalendar/icalendar/blob/main/README.rst#related-projects>`_.
 
     """  # noqa: E501
     rrules = self.get("RRULE", [])
@@ -448,6 +448,23 @@ def single_int_property(
     return property(fget, fset, fdel, doc)
 
 
+def _decode_single_utc_value(name: str, value: object) -> date | datetime:
+    """Extract and check one datetime value of a singleton UTC property.
+
+    Raises:
+        ValueError: If a text or unknown value cannot be parsed.
+        InvalidCalendar: If the decoded value is not a date or datetime.
+    """
+    if isinstance(value, (vText, vUnknown)):
+        # we might be in an attribute that is not typed
+        value = vDDDTypes.from_ical(value)
+    else:
+        value = getattr(value, "dt", value)
+    if not isinstance(value, date):
+        raise InvalidCalendar(f"{name} must be a datetime in UTC, not {value}")
+    return value
+
+
 def single_utc_property(name: str, docs: str) -> property:
     """Create a property to access a value of datetime in UTC timezone.
 
@@ -460,15 +477,28 @@ def single_utc_property(name: str, docs: str) -> property:
         """Get the value."""
         if name not in self:
             return None
-        dt = self.get(name)
-        if isinstance(dt, (vText, vUnknown)):
-            # we might be in an attribute that is not typed
-            value = vDDDTypes.from_ical(dt)
-        else:
-            value = getattr(dt, "dt", dt)
-        if value is None or not isinstance(value, date):
-            raise InvalidCalendar(f"{name} must be a datetime in UTC, not {value}")
-        return tzp.localize_utc(value)
+        raw = self.get(name)
+        # Code continues with less indentation
+        # Broken calendars can repeat singleton properties. Keep all values
+        # for serialization; when reading, use the earliest valid value.
+        items = raw if isinstance(raw, list) else [raw]
+        values = []
+        invalid = raw
+        # duplicate lists are tiny, so the loop overhead is negligible
+        for item in items:
+            try:
+                values.append(_decode_single_utc_value(name, item))
+            except (InvalidCalendar, ValueError):  # noqa: PERF203
+                # Report the decoded value as before, or the raw item
+                # when it cannot be decoded.
+                if isinstance(item, (vText, vUnknown)):
+                    invalid = item
+                else:
+                    invalid = getattr(item, "dt", item)
+                continue
+        if not values:
+            raise InvalidCalendar(f"{name} must be a datetime in UTC, not {invalid}")
+        return min(tzp.localize_utc(value) for value in values)
 
     def fset(self: Component, value: datetime | None):
         """Set the value"""
@@ -1295,17 +1325,26 @@ organizer_property = property(_get_organizer, _set_organizer, _del_organizer)
 
 
 def single_string_enum_property(
-    name: str, enum: type[StrEnum], default: StrEnum, docs: str
+    name: str,
+    enum: type[StrEnum],
+    default: StrEnum | str,
+    docs: str,
+    preserve_unknown: bool = False,
 ) -> property:
     """Create a property to access a single string value and convert it to an enum."""
     prop = single_string_property(name, docs, default=default)
 
-    def fget(self: Component) -> StrEnum:
+    def fget(self: Component) -> StrEnum | str:
         """Get the value."""
         value = prop.fget(self)
         if value == default:
             return default
-        return enum(str(value))
+        try:
+            return enum(str(value))
+        except ValueError:
+            if preserve_unknown:
+                return value
+            raise
 
     def fset(self: Component, value: str | StrEnum | None) -> None:
         """Set the value."""
@@ -1475,24 +1514,49 @@ status_property = single_string_enum_property(
     "STATUS",
     STATUS,
     "",
-    """STATUS defines the overall status or confirmation for the calendar component.
+    r"""STATUS defines the overall status or confirmation for the calendar component.
 
-Returns:
-    :class:`icalendar.enums.STATUS`
+In a group-scheduled calendar component, this property is used by the Organizer
+to provide information about the status of an
+:class:`~icalendar.cal.event.Event`, :class:`~icalendar.cal.todo.Todo`, or
+:class:`~icalendar.cal.journal.Journal`.
 
 The default value is ``""``.
 
-Description:
-    In a group-scheduled calendar component, the property
-    is used by the "Organizer" to provide a confirmation of the event
-    to the "Attendees".  For example in a "VEVENT" calendar component,
-    the "Organizer" can indicate that a meeting is tentative,
-    confirmed, or cancelled.  In a "VTODO" calendar component, the
-    "Organizer" can indicate that an action item needs action, is
-    completed, is in process or being worked on, or has been
-    cancelled.  In a "VJOURNAL" calendar component, the "Organizer"
-    can indicate that a journal entry is draft, final, or has been
-    cancelled or removed.
+Possible values for :class:`~icalendar.cal.event.Event` include the
+following:
+
+-   :attr:`~icalendar.enums.STATUS.CONFIRMED`
+-   :attr:`~icalendar.enums.STATUS.TENTATIVE`
+-   :attr:`~icalendar.enums.STATUS.CANCELLED`
+
+Possible values for :class:`~icalendar.cal.todo.Todo` include the
+following:
+
+-   :attr:`~icalendar.enums.STATUS.NEEDS_ACTION`
+-   :attr:`~icalendar.enums.STATUS.COMPLETED`
+-   :attr:`~icalendar.enums.STATUS.IN_PROCESS`
+-   :attr:`~icalendar.enums.STATUS.CANCELLED`
+-   :attr:`~icalendar.enums.STATUS.PENDING`
+-   :attr:`~icalendar.enums.STATUS.FAILED`
+
+Possible values for :class:`~icalendar.cal.journal.Journal` include the
+following:
+
+-   :attr:`~icalendar.enums.STATUS.DRAFT`
+-   :attr:`~icalendar.enums.STATUS.FINAL`
+-   :attr:`~icalendar.enums.STATUS.CANCELLED`
+
+..  version-changed:: 0.0.0
+
+    Added two task statuses according to :rfc:`10051#section-11.2`\ :
+    :attr:`~icalendar.enums.STATUS.PENDING` for a task that has been accepted
+    but has not started, and :attr:`~icalendar.enums.STATUS.FAILED` for a task
+    that has failed.
+
+Returns:
+    :class:`icalendar.enums.STATUS`.
+
 """,
 )
 
