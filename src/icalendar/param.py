@@ -838,6 +838,21 @@ def _del_GAP(prop):  # noqa: N802
 
 GAP = property(_get_GAP, _set_GAP, _del_GAP)
 
+ORDER = string_parameter(
+    "ORDER",
+    """Specify the ordering of the property instance it is attached to.
+
+    Conformance:
+        This property parameter is specified in :rfc:`9073#section-5.1`.
+
+        The value is an integer >= 1, with a value of 1
+        meaning the instance appears first.
+    """,
+    default=lambda: None,
+    convert=int,
+    convert_to=str,
+)
+
 __all__ = [
     "ALTREP",
     "CN",
@@ -853,6 +868,7 @@ __all__ = [
     "LANGUAGE",
     "LINKREL",
     "MEMBER",
+    "ORDER",
     "PARTSTAT",
     "RANGE",
     "RELATED",
