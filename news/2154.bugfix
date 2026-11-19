@@ -1,0 +1,1 @@
+Fixed :meth:`~icalendar.prop.dt.time.vTime.from_jcal` to preserve the TZID parameter and timezone on parsed TIME properties (:rfc:`7265`). @RajGahoi

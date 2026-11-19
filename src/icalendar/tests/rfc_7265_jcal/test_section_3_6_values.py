@@ -243,3 +243,17 @@ def test_jcal_round_trip_preserves_value_parameter(ics_line, prop_name, expected
     if isinstance(prop, list):
         prop = prop[0]
     assert prop.params.get("VALUE") == expected_value
+
+
+def test_jcal_time_with_tzid_preserves_timezone():
+    """A jCal TIME property with a TZID retains its timezone and survives round-trip (GH #2154)."""
+    jcal = [
+        "vevent",
+        [["x-time", {"tzid": "Asia/Dhaka"}, "time", "08:30:00"]],
+        [],
+    ]
+    event = Event.from_jcal(jcal)
+    prop = event["X-TIME"]
+    assert prop.dt.tzinfo is not None
+    assert prop.params.get("TZID") == "Asia/Dhaka"
+    assert event.to_jcal() == jcal

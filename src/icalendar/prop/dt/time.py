@@ -263,11 +263,14 @@ class vTime(TimeBase):
             ~icalendar.error.JCalParsingError: If the provided jCal is invalid.
         """
         JCalParsingError.validate_property(jcal_property, cls)
+        params = Parameters.from_jcal_property(jcal_property)
         with JCalParsingError.reraise_with_path_added(3):
             value = cls.parse_jcal_value(jcal_property[3])
+        if params.tzid:
+            value = tzp.localize(value, params.tzid)
         return cls(
             value,
-            params=Parameters.from_jcal_property(jcal_property),
+            params=params,
         )
 
     def to_xcal(self, element: Element) -> None:
