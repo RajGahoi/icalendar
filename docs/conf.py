@@ -214,10 +214,6 @@ intersphinx_mapping = {
 }
 
 
-# Suppress ambiguous python domain cross-reference warnings
-# (e.g. 'bytes' matching both vBinary.bytes and vXml.bytes)
-suppress_warnings = ["ref.python"]
-
 # -- sphinx.ext.napoleon configuration ----------------------------------
 napoleon_use_param = True
 napoleon_google_docstring = True
