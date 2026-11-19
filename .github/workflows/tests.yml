@@ -154,16 +154,14 @@ jobs:
     - test-distribution
     - test-source-distribution
     runs-on: ubuntu-latest
-    # This environment stores the TWINE_USERNAME and TWINE_PASSWORD
-    # see https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment
+    # Publishes with PyPI Trusted Publishing, configured for this workflow and environment.
+    # See https://docs.pypi.org/trusted-publishers/
     environment:
       name: PyPI
       url: https://pypi.org/project/icalendar/
-    # after using the environment, we need to make the secrets available
-    # see https://docs.github.com/en/actions/security-guides/encrypted-secrets#example-using-bash
-    env:
-      TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
-      TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+    permissions:
+      contents: read
+      id-token: write
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
     - name: Set up Python
@@ -178,22 +176,10 @@ jobs:
       run: rm -rf dist/*
     - name: build distribution files
       run: python -m build  # same as in test-distribution
+    - name: check distribution files
+      run: twine check dist/*
     - name: deploy to pypi
-      run: |
-        # You will have to set the variables TWINE_USERNAME and TWINE_PASSWORD
-        # You can use a token specific to your project by setting the user name to
-        # __token__ and the password to the token given to you by the PyPI project.
-        # sources:
-        #   - https://shambu2k.hashnode.dev/gitlab-to-pypi
-        #   - http://blog.octomy.org/2020/11/deploying-python-pacakges-to-pypi-using.html?m=1
-        if [ -z "$TWINE_USERNAME" ]; then
-          echo "WARNING: TWINE_USERNAME not set!"
-        fi
-        if [ -z "$TWINE_PASSWORD" ]; then
-          echo "WARNING: TWINE_PASSWORD not set!"
-        fi
-        twine check dist/*
-        twine upload dist/*
+      uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
 
   deploy-github-release:
     # only deploy on tags, see https://stackoverflow.com/a/58478262/1320237

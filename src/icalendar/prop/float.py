@@ -1,6 +1,7 @@
 """FLOAT values from :rfc:`5545`."""
 
 import math
+from decimal import Decimal
 from typing import Any, ClassVar
 from xml.etree.ElementTree import Element, SubElement
 
@@ -10,6 +11,25 @@ from icalendar.parser import Parameters
 from icalendar.parser.xcal.base import XCalParser
 from icalendar.parser.xcal.string import xsd_float_to_string
 from icalendar.parser.xcal.wrapper import from_xcal_wrapper
+
+
+def _float_to_ical(value: float) -> str:
+    """Convert a float to the ``FLOAT`` notation of :rfc:`5545#section-3.3.7`.
+
+    The ``FLOAT`` grammar has no exponent.
+    Python writes very small and very large floats with one, such as ``1e-05``.
+    Those values are written with all their digits instead.
+
+    Parameters:
+        value: The float to convert.
+
+    Returns:
+        The float as a string without an exponent.
+    """
+    text = repr(float(value))
+    if "e" in text:
+        text = format(Decimal(text), "f")
+    return text
 
 
 class vFloat(float):
@@ -69,7 +89,7 @@ class vFloat(float):
         return self
 
     def to_ical(self) -> bytes:
-        return str(self).encode("utf-8")
+        return _float_to_ical(self).encode("utf-8")
 
     @classmethod
     def from_ical(cls, ical: str | float) -> Self:

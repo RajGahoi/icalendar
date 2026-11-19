@@ -25,7 +25,7 @@ Key concepts from that guide include the following.
 -   Headings should be "Sentence cased," not "Title Cased."
 -   Keep sentences short and understandable.
 
-.. note::
+..  note::
     The style guide is mostly enforced through the use of Vale, but only in the narrative documentation at this time.
 
 
@@ -50,7 +50,7 @@ Instead, what you want to achieve matters.
 By keeping each page focused on one category, readers can focus on getting work done, understanding, or experimenting.
 
 
-.. _markup-and-formatting:
+..  _markup-and-formatting:
 
 Markup and formatting
 ---------------------
@@ -76,7 +76,7 @@ Sphinx and its extensions enhance core reStructuredText with additional features
 For configuration of these features, see :ref:`configure-a-package`.
 
 
-.. _markup-examples:
+..  _markup-examples:
 
 Markup examples
 ---------------
@@ -100,13 +100,13 @@ In icalendar's documentation, the most frequently used roles are the following.
 
 When referencing a specific section in an RFC, copy the anchor name from the URL, that is, the part of the URL including and after the pound sign ``#``, and use the following syntax.
 
-.. code-block:: text
+..  code-block:: text
 
     :rfc:`number#anchor`
 
 The following example shows how to link to RFC 6350, Section 6.2.2.
 
-.. code-block:: rst
+..  code-block:: rst
 
     :rfc:`6350#section-6.2.2`
 
@@ -116,7 +116,7 @@ Which renders as shown.
 
 When referencing a GitHub issue, use the following syntax.
 
-.. code-block:: rst
+..  code-block:: rst
 
     :issue:`1050`
 
@@ -126,7 +126,7 @@ Which renders as a hyperlink to the issue on GitHub.
 
 Similarly, for a pull request, the syntax would be the following.
 
-.. code-block:: rst
+..  code-block:: rst
 
     :pr:`808`
 
@@ -134,7 +134,17 @@ Which renders as a hyperlink to the pull request on GitHub.
 
 :pr:`808`
 
-.. seealso::
+For a GitHub username, the syntax would be the following.
+
+..  code-block:: rst
+
+    :user:`stevepiercy`
+
+Which renders as a hyperlink to the user's GitHub Sponsors page, which redirects to their profile page if it doesn't exist.
+
+:user:`stevepiercy`
+
+..  seealso::
 
     :doc:`sphinx:usage/referencing`
         For general Sphinx cross-referencing.
@@ -148,6 +158,16 @@ Cross-reference Python objects
 
 In addition to the general cross-references, Sphinx supports various cross-referencing roles to create hyperlinks to Python objects.
 As with all cross-references, these forms consist of a role, a target, an optional custom label, and an optional modifier.
+
+..  important::
+
+    icalendar objects that are intended for :ref:`internal-use-only` shouldn't use cross-references because they won't link in the rendered documentation.
+    Instead use an inline literal, optionally with its fully qualified path to disambiguate its location.
+
+    ..  code-block:: rst
+
+        See ``_my_private_function`` for implementation details.
+
 
 In icalendar's documentation, the most frequently used roles in the Python domain are the following.
 
@@ -167,7 +187,7 @@ object only
     Thus the object's context is clear to be that within its Python module or class.
     To do so, use the tilde character ``~`` as a modifier, along with the role and target, to display only the object when rendered.
 
-    .. code-block:: rst
+    ..  code-block:: rst
 
         :class:`~icalendar.prop.xml_reference.vXmlReference`
 
@@ -179,7 +199,7 @@ full dotted Python path
     Use this form only when the object exists outside the rendered HTML page, such as in a superclass.
     To do so, use the following syntax consisting of a role and target only.
 
-    .. code-block:: rst
+    ..  code-block:: rst
 
         :class:`icalendar.prop.xml_reference.vXmlReference`
 
@@ -191,7 +211,7 @@ custom text label
     As a compromise to showing the full dotted Python path, while retaining sufficient context of the object's location when displayed, use a custom text label.
     Use this form only when horizontal space is constrained when rendered to HTML.
 
-    .. code-block:: rst
+    ..  code-block:: rst
 
         :class:`prop.xml_reference.vXmlReference <icalendar.prop.xml_reference.vXmlReference>`
 
@@ -199,11 +219,11 @@ custom text label
 
         :class:`prop.xml_reference.vXmlReference <icalendar.prop.xml_reference.vXmlReference>`
 
-.. seealso::
+..  seealso::
 
     :doc:`sphinx:usage/domains/python`
 
-    .. note::
+    ..  note::
 
         Because icalendar uses the Python domain exclusively, it's safe to omit the ``:py`` prefix when creating references to Python objects.
 
@@ -214,17 +234,49 @@ Target shortcut
 As well as the above forms, you can use a shortcut to avoid repeating the full dotted path in the target.
 In the page in which the reference appears, you may use the :rst:dir:`currentmodule <py:currentmodule>` directive and omit the name of the current module.
 
-.. code-block:: rst
+..  code-block:: rst
 
-    .. currentmodule:: icalendar.prop.xml_reference
+    ..  currentmodule:: icalendar.prop.xml_reference
 
     The class :class:`vXmlReference` is useful.
 
-.. currentmodule:: icalendar.prop.xml_reference
+..  currentmodule:: icalendar.prop.xml_reference
 
 The above example will render as shown.
 
     The class :class:`vXmlReference` is useful.
+
+
+..  _python-and-rfc-objects:
+
+Python and RFC objects
+''''''''''''''''''''''
+
+In Sphinx, the role `literal <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#roles>`_ represents inline code.
+In narrative documentation, use double backticks (``````) around Python parameter names, :ref:`internal-use-only` Python methods, literal arguments and values, and other Python objects that can't be displayed as a link via a cross-reference.
+
+The example below shows how to display a Python string as an inline literal:
+
+..  code-block:: rst
+
+    My program outputs ``"Hello World!"``.
+
+Which renders as shown below.
+
+My program outputs ``"Hello World!"``.
+
+If the same Python object appears multiple times throughout a paragraph or section, it's better to apply a cross-reference to the first object only and use inline literals for the rest for better legibility.
+
+Although RFCs often quote RFC component or property names with double quotation marks such as "VCALENDAR" don't quote them in icalendar documentation.
+Avoid using double backticks for RFC component or property names to represent them as inline literals.
+This reduces visual distractions and improves legibility for the reader.
+
+To summarize, Python objects should be represented as either cross-references or inline literals, whereas RFC objects should be ordinary text.
+
+..  seealso::
+
+    Some of the documentation is inconsistent with this guidance, and pull requests to make corrections are welcome.
+    Reference :issue:`2146`.
 
 
 Calendar file code blocks
@@ -264,7 +316,7 @@ To enhance the display of its API documentation, icalendar uses the Sphinx exten
 The former extension supports Google style docstrings, which are easier to write and read, especially when Sphinx renders them to HTML.
 The latter extension supports Python 3 annotations, or type hints, for documenting acceptable parameter types and return value types of functions.
 
-.. seealso::
+..  seealso::
 
     `Google Python Style Guide <https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings>`_ for more examples of docstrings and their format.
 
@@ -283,7 +335,7 @@ All items should terminate with a period.
 
 The following docstrings items are the most frequently used in icalendar, although there may be others.
 
-.. important::
+..  important::
 
     Don't write docstrings for a class's ``__init__`` or ``__new__`` methods, if they're present.
     Instead, write a docstring for the class itself.
@@ -347,7 +399,7 @@ Description
 
         :ref:`type-hints`
 
-    .. note::
+    ..  note::
 
         Use "Parameters" instead of "Args" or "Arguments."
         The term "Parameters" is preferred for consistency with Python's official terminology.
@@ -364,21 +416,21 @@ Description
     These must be valid examples, including imports, as they must pass tests.
     Not only are these helpful to developers, but they're fun to write, and rewarding when they pass.
 
-.. seealso::
+..  seealso::
 
     :ref:`sphinx:Sections`
 
 
-.. _test-docstring-structure-label:
+..  _test-docstring-structure-label:
 
 Test docstring structure
 ------------------------
 
 To test whether docstring structure is valid, run the following command.
 
-```shell
-make docstring
-```
+..  code-block:: shell
+
+    make docstring
 
 
 Escape docstrings
@@ -389,7 +441,7 @@ Use the raw ``r`` indicator immediately before the leading docstring delimiter `
 Thus the docstring and the rendered content will have the same level of escapes.
 It will also be less confusing for readers of the source code.
 
-.. seealso::
+..  seealso::
 
     :ref:`parser-split_on_unescaped_semicolon` example.
 
@@ -404,7 +456,7 @@ The following examples are actual docstrings in icalendar that will render prope
 
 See the rendered view of this class method at :meth:`Event.new() <icalendar.cal.event.Event.new>`.
 
-.. literalinclude:: ../../../src/icalendar/cal/event.py
+..  literalinclude:: ../../../src/icalendar/cal/event.py
     :pyobject: Event.new
 
 
@@ -413,18 +465,18 @@ See the rendered view of this class method at :meth:`Event.new() <icalendar.cal.
 
 See the rendered view of this class method at :meth:`Component.register <icalendar.cal.component.Component.register>`.
 
-.. literalinclude:: ../../../src/icalendar/cal/component.py
+..  literalinclude:: ../../../src/icalendar/cal/component.py
     :pyobject: Component.register
 
 
-.. _parser-split_on_unescaped_semicolon:
+..  _parser-split_on_unescaped_semicolon:
 
 ``parser.property.split_on_unescaped_semicolon``
 ''''''''''''''''''''''''''''''''''''''''''''''''
 
 See the rendered view of this class method at :meth:`parser.property.split_on_unescaped_semicolon <icalendar.parser.property.split_on_unescaped_semicolon>`.
 
-.. literalinclude:: ../../../src/icalendar/parser/property.py
+..  literalinclude:: ../../../src/icalendar/parser/property.py
     :pyobject: split_on_unescaped_semicolon
 
 
@@ -433,16 +485,14 @@ Style and quality checks
 
 When making a contribution to documentation, style and quality checks must pass both locally while developing and in continuous integration after opening a pull request.
 
-.. seealso::
+..  seealso::
 
     See :doc:`build-check` for how to set up and run the builds and checks on documentation.
 
 In addition to automated checks, perform visual checks to ensure that documentation renders as intended.
+Read the Docs' `visual diff <https://docs.readthedocs.com/platform/stable/visual-diff.html>`_ feature might help find what you've changed.
 
-icalendar is configured with Read the Docs to build pull request previews of documentation.
-When a pull request is opened on a branch and there are changes to any documentation files, Read the Docs will build a preview of the documentation, and insert a link to the build in the pull request description.
-If there's no link, either there are no changes to documentation files or the branch isn't in the icalendar repository.
-All pull request preview builds are listed on Read the Docs at `icalendar builds <https://app.readthedocs.org/projects/icalendar/builds/>`_.
+..  include:: ../../_include/rtd-preview-navigate.inc
 
 Always pay attention to errors and continuous integration failures, and attempt to resolve them.
 Warnings may provide helpful information.
@@ -453,7 +503,7 @@ Link checks
 
 All links must be valid.
 
-.. seealso::
+..  seealso::
 
     See how to check links in :ref:`make-linkcheckbroken`.
 
@@ -471,12 +521,12 @@ If you're more comfortable writing in your preferred language, then you may subm
 You're encouraged to make a reasonable effort, and to request a review of their pull request from community members who are fluent in English to fix grammar and syntax.
 Please ask!
 
-.. note::
+..  note::
     More corrections to spellings and Vale's configuration are welcome by submitting a pull request.
     This is an easy way to become a contributor to icalendar.
     See :ref:`vale-configuration` for details.
 
-.. seealso::
+..  seealso::
 
     See how to use :ref:`Vale <make-vale>`.
 
