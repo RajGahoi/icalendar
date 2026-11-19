@@ -67,7 +67,7 @@ Glossary
         For example, the calendar component can specify an event, a to-do, a journal entry, time zone information, free/busy time information, or an alarm.
 
         All calendar components start with the letter "V".
-        For example, "VEVENT" refers to the event calendar component.
+        For example, VEVENT refers to the event calendar component.
 
         ..  seealso::
 

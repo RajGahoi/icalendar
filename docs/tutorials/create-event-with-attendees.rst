@@ -27,7 +27,7 @@ After creating a new calendar, you can view its properties by using :meth:`~ical
     UID:d755cef5-2311-46ed-a0e1-6733c9e15c63
     END:VCALENDAR
 
-Notice that by default a calendar contains the version, product identifier (``PRODID``), and a unique identifier (``UID``).
+Notice that by default a calendar contains the version, product identifier (PRODID), and a unique identifier (UID).
 All these properties are required for a calendar.
 You can also set and change these properties.
 
@@ -78,7 +78,7 @@ The output shows your new event:
     UID:d755cef5-2311-46ed-a0e1-6733c9e15c63
     END:VEVENT
 
-Notice that the event component includes the start and end dates with their times (``DTSTART`` and ``DTEND``) along with a unique identifier (``UID``), and its creation timestamp (``DTSTAMP``).
+Notice that the event component includes the start and end dates with their times (DTSTART and DTEND) along with a unique identifier (UID), and its creation timestamp (DTSTAMP).
 
 Similar to the calendar event, you can edit these properties or add new ones.
 

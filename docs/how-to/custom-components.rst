@@ -9,7 +9,7 @@ icalendar automatically handles X-components and IANA-components not in :rfc:`55
 :rfc:`5545` defines two custom component types.
 
 X-Components
-    Vendor-specific components, for example, ``X-MYAPP-SETTINGS``.
+    Vendor-specific components, for example, X-MYAPP-SETTINGS.
 
 IANA-Components
     IANA-registered components, but not in :rfc:`5545`.
@@ -27,7 +27,7 @@ Parse custom components using either :meth:`Component.from_ical() <icalendar.cal
 -------------------------
 
 Parse any component type, including custom ones.
-The following example shows how to parse a component, then display its name and ``SUMMARY``.
+The following example shows how to parse a component, then display its name and SUMMARY.
 
 .. code-block:: pycon
 
@@ -48,7 +48,7 @@ The following example shows how to parse a component, then display its name and 
 ------------------------
 
 Parse a calendar containing custom components.
-The following example shows how to parse a component, get its subcomponents, then display its name and ``UID``.
+The following example shows how to parse a component, get its subcomponents, then display its name and UID.
 
 .. code-block:: pycon
 

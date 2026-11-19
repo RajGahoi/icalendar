@@ -46,7 +46,7 @@ This is equivalent to assigning them afterward.
     >>> event.attendees
     [vCalAddress('mailto:emily.smith@example.com')]
 
-An attendee may carry parameters defined by :rfc:`5545#section-3.8.4.1`, such as ``CN``, ``ROLE``, and ``RSVP``.
+An attendee may carry parameters defined by :rfc:`5545#section-3.8.4.1`, such as CN, ROLE, and RSVP.
 Create such an attendee with :meth:`vCalAddress.new <icalendar.prop.cal_address.vCalAddress.new>`, whose Python keyword arguments ``cn``, ``role``, and ``rsvp`` set those RFC parameters.
 
 .. code-block:: pycon

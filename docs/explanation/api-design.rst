@@ -52,7 +52,7 @@ The next example iCalendar file consists of a property with a name, parameters s
 In the previous iCalendar file example, its parts are the following.
 
 name
-    ``ATTENDEE``
+    ATTENDEE
 parameters
     ``CN=Max Rasmussen;ROLE=REQ-PARTICIPANT``
 value
@@ -73,7 +73,7 @@ The values have special types, including integer, text, and datetime.
 These values are encoded in a special text format in an iCalendar file.
 icalendar contains methods for converting to and from these encodings.
 
-The following example is a ``VCALENDAR`` component representing a calendar.
+The following example is a VCALENDAR component representing a calendar.
 
 ..  code-block:: ics
 
@@ -81,8 +81,8 @@ The following example is a ``VCALENDAR`` component representing a calendar.
     ... vcalendar properties ...
     END:VCALENDAR
 
-The most frequent subcomponent to a ``VCALENDAR`` component is a ``VEVENT``.
-This following example is a ``VCALENDAR`` component with a nested ``VEVENT`` subcomponent.
+The most frequent subcomponent to a VCALENDAR component is a VEVENT.
+This following example is a VCALENDAR component with a nested VEVENT subcomponent.
 
 ..  code-block:: ics
 
@@ -126,7 +126,7 @@ Accessing components by their properties is preferred over using the :ref:`dicti
 * Default values require fewer logical coding checks for presence.
 
 The example below creates an event with useful default values, using :meth:`~icalendar.cal.event.Event.new`.
-:rfc:`5545` requires ``DTSTAMP`` and ``UID`` values to be present.
+:rfc:`5545` requires DTSTAMP and UID values to be present.
 They are automatically added.
 
 .. code-block:: pycon
@@ -163,7 +163,7 @@ Property naming convention
 Property names are either in lower case or upper case.
 
 -   Upper case property names refer simultaneously to both the Python component property name and the iCalendar :rfc:`5545` property name.
-    For example, ``DTEND`` occurs in :rfc:`5545#section-3.6.1` and as a property in :class:`~icalendar.cal.event.Event`.
+    For example, DTEND occurs in :rfc:`5545#section-3.6.1` and as a property in :class:`~icalendar.cal.event.Event`.
 -   Lower case property names refer to only the Python component property name.
     These properties are calculated from one or more upper case properties.
     For example, :attr:`~icalendar.cal.event.Event.end` is calculated either from :attr:`~icalendar.cal.event.Event.DTEND` or from both :attr:`~icalendar.cal.event.Event.DTSTART` and :attr:`~icalendar.cal.event.Event.DURATION`.
@@ -308,11 +308,11 @@ Parameter dictionary
 --------------------
 
 All property values are defined in :mod:`icalendar.prop` and have parameters.
-:class:`~icalendar.prop.text.vText` is used for ``VERSION``, ``PRODID``, and ``DESCRIPTION``.
+:class:`~icalendar.prop.text.vText` is used for VERSION, PRODID, and DESCRIPTION.
 Preferably, use the :ref:`parameter-properties` to get and set the values.
 You can also access them using ``.params``.
 
-The following example sets the ``DESCRIPTION`` from  :rfc:`7986#section-5.1`, and adds a ``LANGUAGE`` parameter:
+The following example sets the DESCRIPTION from  :rfc:`7986#section-5.1`, and adds a LANGUAGE parameter:
 
 .. code-block:: pycon
 
