@@ -1,0 +1,1 @@
+Fixed :class:`~icalendar.prop.float.vFloat` and :class:`~icalendar.prop.geo.vGeo` to write very small and very large numbers without an exponent, instead of, for example, ``GEO:1e-05;-2e-05``. The FLOAT value type of :rfc:`5545#section-3.3.7` does not allow an exponent. @fermsp

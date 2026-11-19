@@ -19,6 +19,7 @@ Maintainers need the following permissions.
     Each owner and maintainer needs a PyPI account.
     All PyPI accounts require two-factor authentication (2FA) enabled.
     Owners can invite either new owners or maintainers in the `collaboration Section <https://pypi.org/manage/project/icalendar/collaboration/>`_ on PyPI.
+    Releases publish through `Trusted Publishing <https://docs.pypi.org/trusted-publishers/>`_, which owners manage on the project's `Publishing <https://pypi.org/manage/project/icalendar/settings/publishing/>`_ page.
 ``Maintainer`` access to the `Read the Docs project <https://app.readthedocs.org/projects/icalendar/>`_.
     Existing maintainers can invite another maintainer through the `Maintainers <https://app.readthedocs.org/dashboard/icalendar/users/create/>`_ page.
 ``Environments/Configure PyPI`` access for GitHub Workflows to grant new releases from tags.

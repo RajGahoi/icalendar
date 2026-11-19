@@ -184,6 +184,8 @@ Code conventions
 icalendar has adopted code conventions to help make its code more legible and understandable.
 
 
+..  _internal-use-only:
+
 Internal use only
 '''''''''''''''''
 

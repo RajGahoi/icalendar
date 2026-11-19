@@ -1,7 +1,7 @@
 """Check that Sphinx version directives use released versions.
 
 ``0.0.0`` is allowed until a release replaces it with the release version.
-See https://github.com/collective/icalendar/issues/2026
+See https://github.com/PyCalendar/icalendar/issues/2026
 """
 
 import os

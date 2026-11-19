@@ -298,12 +298,14 @@ Write a good change log entry
 The content of this file must be on a single line and include the following.
 
 -   A *brief* message that summarizes the changes in your contribution.
--   Use :ref:`reStructuredText markup cross-references <markup-examples>` to link to relevant RFCs, API usage and Python objects, and other references.
+-   Use :ref:`reStructuredText markup cross-references <markup-examples>` to link to relevant RFCs, API usage and Python objects, and other documentation references.
 -   A *brief* disclosure of AI use, per icalendar's :ref:`responsible-ai-use` policy, if applicable.
--   An attribution to yourself, in the format of ``@github_username``, at the end of the entry.
+-   An attribution to yourself, in the format of ``:user:`github_username```, at the end of the entry.
+    This will render as a link to your GitHub Sponsors page, or if it doesn't exist, it will redirect to your GitHub profile page.
 
 Write a good change log entry with the following guidance.
 
+-   Follow the :doc:`documentation/style-guide`.
 -   Use a narrative format, in the past tense, proper English spelling and grammar, and inline markup as needed.
 -   Write your change log entry for its appropriate audience.
 
@@ -313,7 +315,6 @@ Write a good change log entry with the following guidance.
 -   If you fix a bug, write what was broken and is now fixed.
     You should not write *how* you fixed it.
 -   If you add or change a feature or public API, write a summary of previous behavior, what it does now, and how to use it.
--   Refer to narrative documentation as needed.
 -   After opening a pull request and the CI check :guilabel:`docs/readthedocs.org:icalendar` succeeds, inspect the rendered change log for accuracy and functional links.
 
     -   Click the link :guilabel:`docs/readthedocs.org:icalendar` in the list of CI checks.
@@ -325,13 +326,27 @@ The following text is an example of a good change log entry, placed inside :file
 
 ..  code-block:: rst
 
-    Created a :meth:`~icalendar.prop.recur.weekday.vWeekday.ical_value` property for the :class:`~icalendar.prop.recur.weekday.vWeekday` component, mirroring the existing pattern on :class:`~icalendar.prop.boolean.vBoolean`. @mvanhorn
+    Created a :meth:`~icalendar.prop.recur.weekday.vWeekday.ical_value` property for the :class:`~icalendar.prop.recur.weekday.vWeekday` component, mirroring the existing pattern on :class:`~icalendar.prop.boolean.vBoolean`. :user:`mvanhorn`
 
 The following would be a poor change log entry.
 
 ..  code-block:: rst
 
     Fix #123456 by chaning config of file [did_not_read_this_guide]
+
+..  _check-change-log:
+
+Check change log
+````````````````
+
+..  include:: ../_include/rtd-preview-navigate.inc
+
+Once you're in the pull request preview:
+
+-   Navigate to :menuselection:`Reference guides --> Change log`.
+-   Search for your username for the rendered change log entry, and inspect it for accuracy and functional links.
+
+Read the Docs' `visual diff <https://docs.readthedocs.com/platform/stable/visual-diff.html>`_ feature might help find what you've changed.
 
 
 Set up for development

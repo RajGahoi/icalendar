@@ -1,0 +1,1 @@
+Releases now publish to PyPI with Trusted Publishing instead of a stored API token. @SashankBhamidi
