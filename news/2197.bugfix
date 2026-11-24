@@ -1,0 +1,1 @@
+:attr:`~icalendar.cal.alarm.Alarm.TRIGGER_RELATED` now treats the RELATED parameter as case-insensitive and normalizes to "START" or "END", defaulting unrecognized values to "START" per :rfc:`5545#section-3.2` and :rfc:`5545#section-3.8.6.3`. - by :user:`RajGahoi`

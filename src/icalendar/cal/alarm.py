@@ -273,7 +273,12 @@ class Alarm(Component):
         trigger = self.get("TRIGGER")
         if trigger is None:
             return "START"
-        return trigger.params.get("RELATED", "START")
+        related = trigger.params.get("RELATED", "START")
+        if isinstance(related, str):
+            related_upper = related.upper()
+            if related_upper in ("START", "END"):
+                return related_upper
+        return "START"
 
     @TRIGGER_RELATED.setter
     def TRIGGER_RELATED(self, value: str):
@@ -283,6 +288,8 @@ class Alarm(Component):
             raise ValueError(
                 "You must set a TRIGGER before setting the RELATED parameter."
             )
+        if isinstance(value, str):
+            value = value.upper()
         trigger.params["RELATED"] = value
 
     class Triggers(NamedTuple):
