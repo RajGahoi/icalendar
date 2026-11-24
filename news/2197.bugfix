@@ -1,0 +1,1 @@
+Fix case-insensitive `TRIGGER;RELATED=start` parsing in `Alarm.TRIGGER_RELATED` and `Alarm.triggers` to canonical uppercase `START`.
