@@ -1,5 +1,6 @@
 # icalendar documentation build configuration file
 import datetime
+import logging
 import os
 import sys
 from pathlib import Path
@@ -31,6 +32,19 @@ extensions = [
 ]
 source_suffix = {".rst": "restructuredtext"}
 master_doc = "index"
+
+
+# -- Sphinx logging filters --------------------------------------------------
+# Suppress known Sphinx ambiguity between built-in bytes and vBinary/vXml.bytes
+class SphinxWarningFilter(logging.Filter):
+    def filter(self, record):
+        return (
+            "more than one target found for cross-reference 'bytes'"
+            not in record.getMessage()
+        )
+
+
+logging.getLogger("sphinx").addFilter(SphinxWarningFilter())
 
 # -- Options for HTML output -------------------------------------------------
 
