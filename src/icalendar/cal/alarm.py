@@ -595,7 +595,7 @@ class Alarm(Component):
                 absolute :class:`~datetime.datetime` (recommend UTC-aware).
             attachments: Optional audio attachment. Accepts a URI as a
                 :class:`str` or :class:`~icalendar.prop.uri.vUri`, or
-                inline binary audio as :class:`bytes` or
+                inline binary audio as :class:`python:bytes` or
                 :class:`~icalendar.prop.binary.vBinary`. When ``None``,
                 the client uses its default sound.
             duration: Gap between repeated triggers. Must be paired with
