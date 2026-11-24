@@ -273,7 +273,10 @@ class Alarm(Component):
         trigger = self.get("TRIGGER")
         if trigger is None:
             return "START"
-        return trigger.params.get("RELATED", "START")
+        related = trigger.params.get("RELATED", "START")
+        if isinstance(related, str):
+            return related.upper()
+        return "START"
 
     @TRIGGER_RELATED.setter
     def TRIGGER_RELATED(self, value: str):
