@@ -16,6 +16,8 @@ from icalendar.parser.xcal.wrapper import from_xcal_wrapper
 def _float_to_ical(value: float) -> str:
     """Convert a float to the ``FLOAT`` notation of :rfc:`5545#section-3.3.7`.
 
+    :meta private:
+
     The ``FLOAT`` grammar has no exponent.
     Python writes very small and very large floats with one, such as ``1e-05``.
     Those values are written with all their digits instead.
@@ -141,10 +143,11 @@ class vFloat(float):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            element: The xCal element to parse.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

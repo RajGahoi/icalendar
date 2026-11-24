@@ -1,4 +1,4 @@
-"""Common parsing functions based on string."""
+"""Common :term:`XSD` parsing functions based on string."""
 
 import math
 import re
@@ -11,8 +11,8 @@ def string_to_xsd_float(xsd_float: str) -> float:
         The parsed float.
 
     Raises:
-        ValueError: if the input is not an xsd:float
-        TypeError: if the input is not :class:`str`
+        ValueError: If the input is not an xsd:float.
+        TypeError: If the input is not :class:`str`.
     """
     if not isinstance(xsd_float, str):
         raise TypeError("Expected xsd:float. Got None.")
@@ -53,15 +53,19 @@ matched here. They can't be encoded as UTF-8, and ``to_ical()`` rejects them.
 def _to_valid_xml_string(string: str) -> str:
     """Remove all characters that are not valid XML characters.
 
-    Returns:
+    :meta private:
 
+    Parameters:
+        string: The string from which to remove characters that are not valid
+            XML characters.
+
+    Returns:
         A string with all characters that are not valid XML characters removed.
 
-    .. seealso::
-
-        `XML Character Range <https://www.w3.org/TR/REC-xml/#charsets>`_,
-        `~icalendar.prop.text._strip_unsafe_text_chars`,
-        `Issue 1888 <https://github.com/PyCalendar/icalendar/issues/1888>`_,
+    See also:
+        -   `XML Character Range <https://www.w3.org/TR/REC-xml/#charsets>`_
+        -   ``icalendar.prop.text._strip_unsafe_text_chars``
+        -   `Issue 1888 <https://github.com/PyCalendar/icalendar/issues/1888>`_
     """
     return _INVALID_XML_CHARACTERS.sub("", string)
 

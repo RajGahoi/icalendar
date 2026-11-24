@@ -71,7 +71,14 @@ class ElementAdapter:
         return children
 
     def get_child_with_tag(self, tag: str) -> ChildElementAdapter | None:
-        """Get the first child element with the given tag."""
+        """Get the first child element with the given tag.
+
+        Parameters:
+            tag: Required. The tag to search for.
+
+        Returns:
+            The first child element with the given tag, or ``None`` if not found.
+        """
         tag = tag.lower()
         for child in self.children:
             if child.tag == tag:
@@ -80,6 +87,9 @@ class ElementAdapter:
 
     def parse_tag(self, tag: str):
         """Get the first child element with the given tag.
+
+        Parameters:
+            tag: Required. The tag to search for.
 
         Returns:
             The first child element with the given tag.
@@ -140,11 +150,21 @@ class ElementAdapter:
             ) from e
 
     def __repr__(self) -> str:
-        """Return the text representation of this element."""
+        """Return the text representation of this element.
+
+        :meta private:
+        """
         return f"Element@{self.get_xpath()}"
 
     def make_parent(self, tag: str) -> ElementAdapter:
-        """Return an element adapter for a parent."""
+        """Return an element adapter for a parent.
+
+        Parameters:
+            tag: Required. The tag for the parent element.
+
+        Returns:
+            The element adapter for the parent element.
+        """
         parent = Element(tag)
         parent.append(self._element)
         return ElementAdapter(parent)
@@ -153,6 +173,9 @@ class ElementAdapter:
         """Return the inner text.
 
         This is useful when there is a broken property.
+
+        Returns:
+            The inner text of the element.
         """
         return self.get_xsd_string()
 
@@ -161,9 +184,10 @@ class ChildElementAdapter(ElementAdapter):
     """An adapter class with convenience methods for child elements.
 
     Parameters:
-        child: The child element.
+        child: Required. The child element.
+        parent: Required. The parent element adapter.
         index: The index for building the XPath in the parent.
-        parent: The parent element adapter.
+            Default is ``1``.
     """
 
     def __init__(self, child: Element, parent: ElementAdapter, index: int = 1) -> None:

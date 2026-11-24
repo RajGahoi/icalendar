@@ -102,11 +102,16 @@ _EQUIVALENT_IDS: dict[str, set[str]] = defaultdict(set)
 
 
 def _add_equivalent_ids(value: tuple | dict | set):
-    """This adds equivalent ids/
+    """This adds equivalent IDs.
+
+    :meta private:
 
     As soon as one timezone implementation used claims their equivalence,
     they are considered equivalent.
-    Have a look at icalendar.timezone.equivalent_timezone_ids.
+
+    See also:
+        :mod:`timezone.equivalent_timezone_ids
+         <icalendar.timezone.equivalent_timezone_ids>`
     """
     if isinstance(value, set):
         for tzid in value:

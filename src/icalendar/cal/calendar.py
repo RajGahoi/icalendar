@@ -157,7 +157,10 @@ class Calendar(Component):
 
     @classmethod
     def _get_ical_parser(cls, st: str | bytes) -> ComponentIcalParser:
-        """Get the iCal parser for the given input string."""
+        """Get the iCal parser for the given input string.
+
+        :meta private:
+        """
         return CalendarIcalParser(st, cls._get_component_factory(), cls.types_factory)
 
     @overload

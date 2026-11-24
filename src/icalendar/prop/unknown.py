@@ -50,6 +50,12 @@ class vUnknown(str):
           </vcalendar>
         </icalendar>
 
+    Parameters:
+        value: Required. The value of the unknown property.
+        encoding: The encoding of the value. Default is
+            :data:`~icalendar.parser_tools.DEFAULT_ENCODING`.
+        params: The parameters of the property.
+
     See also:
 
         :rfc:`7265#section-5.1`
@@ -180,10 +186,11 @@ class vUnknown(str):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.
@@ -195,12 +202,13 @@ class vUnknown(str):
     @classmethod
     @from_xcal_wrapper
     def from_first_xcal_element(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
-        This class is used as a fallback if no other type can parse this.
+        This class is used as a fallback if no other type can parse this xCal.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

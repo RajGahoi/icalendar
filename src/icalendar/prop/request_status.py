@@ -69,7 +69,10 @@ class vRequestStatus(vText):
     __match: re.Match | None = None
 
     def _get_match(self) -> re.Match | None:
-        """Return a match for parsing."""
+        """Return a match for parsing.
+
+        :meta private:
+        """
         if self.__match is None:
             self.__match = REQUEST_STATUS_GRAMMAR.match(self)
         return self.__match
@@ -101,7 +104,10 @@ class vRequestStatus(vText):
         return match.group("code")
 
     def _unescape(self, string: str):
-        """Unescape a string."""
+        """Unescape a string.
+
+        :meta private:
+        """
         return UNESCAPE.sub(r"\1", string)
 
     @property
@@ -233,10 +239,11 @@ class vRequestStatus(vText):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

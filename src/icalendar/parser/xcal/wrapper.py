@@ -1,4 +1,4 @@
-"""Convenience methods for parsing."""
+"""Convenience methods for parsing xCal."""
 
 from __future__ import annotations
 
@@ -16,13 +16,13 @@ if TYPE_CHECKING:
 
 VProp = TypeVar("VProp")
 
-# Trying to solve typing issues: https://stackoverflow.com/q/80005905/1320237
+# TODO: Trying to solve typing issues: https://stackoverflow.com/q/80005905/1320237
 
 
 def from_xcal_wrapper(
     func: Callable[[type[VProp], XCalParser, Parameters], VProp],
 ) -> Callable[[type[VProp], XCalParser | ElementAdapter | Element], VProp]:
-    """Wrap a property's from_xcal() with convenience functions.
+    """Wrap a property's ``from_xcal()`` with convenience functions.
 
     Use it below ``@classmethod`` so that type checkers and linters see
     a class method.

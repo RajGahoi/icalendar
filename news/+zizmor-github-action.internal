@@ -1,1 +1,0 @@
-Switched to use the recommended GitHub Action :program:`zizmorcore/zizmor-action` from installing :program:`zizmor` via pip. @stevepiercy

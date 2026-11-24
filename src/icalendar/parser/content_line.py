@@ -33,6 +33,8 @@ def _strip_ows_around_delimiters(st: str, delimiters: str = ";=") -> str:
     respecting backslash escapes so that escaped delimiters are not treated as
     separators.
 
+    :meta private:
+
     This is a lenient parsing helper (used when strict=False) to support
     iCalendar content lines that contain extra whitespace around tokens.
     """

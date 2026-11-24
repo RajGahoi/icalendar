@@ -174,7 +174,10 @@ class Todo(Component):
     )
 
     def _get_start_end_duration(self):
-        """Verify the calendar validity and return the right attributes."""
+        """Verify the calendar validity and return the right attributes.
+
+        :meta private:
+        """
         return get_start_end_duration_with_validation(self, "DTSTART", "DUE", "VTODO")
 
     @property

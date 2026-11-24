@@ -251,8 +251,8 @@ class vDatetime(TimeBase):
         In contrast to :meth:`to_xcal`, this method does not add the parameters.
 
         Parameters:
-            element: The element to add the property to.
-            tag: The tag to use.
+            element: Required. The element to add the property to.
+            tag: Required. The tag to use.
         """
         element = SubElement(element, tag.lower())
         text = self.dt.strftime("%Y-%m-%dT%H:%M:%S")
@@ -262,10 +262,10 @@ class vDatetime(TimeBase):
 
     @classmethod
     def from_xcal_element(cls, element: ElementAdapter) -> datetime:
-        """Parse xCal from :rfc:`6321`.
+        """Parse an xCal date-time element according to :rfc:`6321`.
 
         Parameters:
-            element: The xCal element to parse.
+            element: Required. The xCal element to parse.
 
         Returns:
             The datetime object, possibly with a UTC timezone.
@@ -326,10 +326,11 @@ class vDatetime(TimeBase):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

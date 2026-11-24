@@ -5,11 +5,11 @@ from __future__ import annotations
 from xml.etree.ElementTree import Element, ElementTree, parse
 
 MAX_ALARM_REPEAT: int = 10_000
-"""Cap on additional triggers expanded from a ``VALARM`` ``REPEAT`` property.
+"""Cap on additional triggers expanded from a VALARM REPEAT property.
 
-:rfc:`5545#section-3.8.6.2` defines ``REPEAT`` as an ``INTEGER`` data type, which is
+:rfc:`5545#section-3.8.6.2` defines REPEAT as an INTEGER data type, which is
 defined in :rfc:`5545#section-3.3.8` as an integer between -2147483648 and 2147483647.
-A value for ``REPEAT`` that is greater than approximately ``10_000`` can exhaust memory
+A value for REPEAT that is greater than approximately ``10_000`` can exhaust memory
 or CPU. The default value of ``10_000`` is a practical setting, but may be adjusted to
 specific use cases. Set to ``-1`` to disable the cap, which should be done only for
 fully trusted input.
@@ -21,8 +21,10 @@ fully trusted input.
 def _clamp_repeat(n: int) -> int:
     """Return *n* clamped to ``[0, MAX_ALARM_REPEAT]``.
 
-    Negative values are treated as 0. When :data:`MAX_ALARM_REPEAT` is ``-1``
-    the value is returned unchanged after clamping negatives to 0.
+    :meta private:
+
+    Negative values are treated as ``0``. When :data:`MAX_ALARM_REPEAT` is ``-1``
+    the value is returned unchanged after clamping negatives to ``0``.
     """
     if n < 0:
         return 0
@@ -32,7 +34,7 @@ def _clamp_repeat(n: int) -> int:
 
 
 def parse_xml(source) -> ElementTree[Element[str]]:
-    """Parse xml from source.
+    """Parse XML from source.
 
     This wraps :func:`xml.etree.ElementTree.parse`.
     It makes the XML parser configurable.
@@ -45,7 +47,7 @@ def parse_xml(source) -> ElementTree[Element[str]]:
         :ref:`safe-xml-parsing`
 
     Parameters:
-        source: A file-like object to with a ``read`` method.
+        source: Required. A file-like object to parse with a ``read`` method.
 
     Returns:
         The parsed XML tree.

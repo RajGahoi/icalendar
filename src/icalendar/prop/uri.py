@@ -124,7 +124,10 @@ class vUri(str):
         return str(self)
 
     def __repr__(self) -> str:
-        """repr(self)"""
+        """repr(self)
+
+        :meta private:
+        """
         return f"{self.__class__.__name__}({self.uri!r})"
 
     from icalendar.param import FMTTYPE, GAP, LABEL, LANGUAGE, LINKREL, RELTYPE, VALUE
@@ -138,10 +141,11 @@ class vUri(str):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

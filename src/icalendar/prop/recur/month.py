@@ -90,11 +90,17 @@ class vMonth(int):
         self._leap = value
 
     def __repr__(self) -> str:
-        """repr(self)"""
+        """repr(self)
+
+        :meta private:
+        """
         return f"{self.__class__.__name__}({str(self)!r})"
 
     def __str__(self) -> str:
-        """str(self)"""
+        """str(self)
+
+        :meta private:
+        """
         return f"{int(self)}{'L' if self.leap else ''}"
 
     @classmethod
@@ -115,10 +121,11 @@ class vMonth(int):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

@@ -278,7 +278,6 @@ class LazyCalendar(Calendar):
     """The strategy pattern for subcomponents of the calendar."""
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the calendar."""
         self._subcomponents = InitialSubcomponentsStrategy()
         super().__init__(*args, **kwargs)
 
@@ -310,14 +309,20 @@ class LazyCalendar(Calendar):
 
     @classmethod
     def _get_ical_parser(cls, st: str | bytes) -> ComponentIcalParser:
-        """Get the iCal parser for the given input string."""
+        """Get the iCal parser for the given input string.
+
+        :meta private:
+        """
         return LazyCalendarIcalParser(
             st, cls._get_component_factory(), cls.types_factory
         )
 
     @classmethod
     def _get_component_factory(cls) -> ComponentFactory:
-        """Get the component factory for this calendar."""
+        """Get the component factory for this calendar.
+
+        :meta private:
+        """
         factory = ComponentFactory()
         factory.add_component_class(cls)
         return factory

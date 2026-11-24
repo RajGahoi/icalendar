@@ -1,1 +1,0 @@
-Fixed iCalendar and jCal serialization of recurrence rules with ``UNTIL`` dates or date-times parsed from xCal. AI assisted with diagnosis, implementation, and regression tests. @jihtsan

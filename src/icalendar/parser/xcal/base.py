@@ -72,7 +72,10 @@ class XCalParser:
 
     @staticmethod
     def _sanitize_tags(tags: str | Sequence[str]) -> set[str]:
-        """Return a set of tags to test."""
+        """Return a set of tags to test.
+
+        :meta private:
+        """
         if isinstance(tags, str):
             return {tags.lower()}
         return {t.lower() for t in tags}
@@ -81,6 +84,12 @@ class XCalParser:
         """Find a child tag and return it if present, else ``None``.
 
         This child is then considered parsed.
+
+        Parameters:
+            tag: Required. The tag or tags to search for.
+
+        Returns:
+            The child element with the tag, or ``None`` if not found.
         """
         tags = self._sanitize_tags(tag)
         return self._parse_tag(tags)
@@ -89,6 +98,9 @@ class XCalParser:
         """Find a child tag and return it.
 
         This child is then considered parsed.
+
+        Parameters:
+            tag: The tag or tags to search for.
 
         Returns:
             The child element with the tag, or if no tag is given, then the first child.
@@ -111,6 +123,8 @@ class XCalParser:
 
     def _parse_tag(self, tags: set[str]) -> ElementAdapter | None:
         """Find a child tag and return it.
+
+        :meta private:
 
         This child is then considered parsed.
         """
@@ -144,6 +158,9 @@ class XCalParser:
 
         This serves as a check before :meth:`parse_tag`.
         The returned tag is not marked as parsed.
+
+        Parameters:
+            tag: The tag or tags to search for.
 
         Returns:
             The tag that is present.

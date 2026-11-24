@@ -71,6 +71,7 @@ html_js_files = [
 html_static_path = ["_static"]
 html_theme = "pydata_sphinx_theme"
 html_theme_options = {
+    "announcement": "Until further notice, maintainers alone are unable to respond to the high volume of new pull requests.<br>See <a href='https://icalendar.readthedocs.io/en/latest/contribute/index.html#peer-reviews'>Peer reviews</a> instead of opening a new pull request.",  # noqa: E501
     "icon_links": [
         {
             "name": "GitHub",

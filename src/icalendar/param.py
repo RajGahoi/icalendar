@@ -26,12 +26,18 @@ if TYPE_CHECKING:
 
 
 def _default_return_none() -> str | None:
-    """Return None by default."""
+    """Return ``None`` by default.
+
+    :meta private:
+    """
     return None
 
 
 def _default_return_string() -> str:
-    """Return None by default."""
+    """Return ``None`` by default.
+
+    :meta private:
+    """
     return ""
 
 
@@ -156,7 +162,10 @@ Description:
 
 
 def _default_return_individual() -> enums.CUTYPE | str:
-    """Default value."""
+    """Default value.
+
+    :meta private:
+    """
     return enums.CUTYPE.INDIVIDUAL
 
 
@@ -263,7 +272,10 @@ Description:
 
 
 def _default_return_busy() -> enums.FBTYPE | str:
-    """Default value."""
+    """Default value.
+
+    :meta private:
+    """
     return enums.FBTYPE.BUSY
 
 
@@ -309,7 +321,10 @@ MEMBER = quoted_list_parameter("MEMBER")
 
 
 def _default_return_needs_action() -> enums.PARTSTAT | str:
-    """Default value."""
+    """Default value.
+
+    :meta private:
+    """
     return enums.PARTSTAT.NEEDS_ACTION
 
 
@@ -552,23 +567,9 @@ Description:
 def _get_value(self: VPROPERTY) -> str:
     """The VALUE parameter or the default.
 
-    Purpose:
-        VALUE explicitly specify the value type format for a property value.
+    :meta private:
 
-    Description:
-        This parameter specifies the value type and format of
-        the property value.  The property values MUST be of a single value
-        type.  For example, a "RDATE" property cannot have a combination
-        of DATE-TIME and TIME value types.
-
-        If the property's value is the default value type, then this
-        parameter need not be specified.  However, if the property's
-        default value type is overridden by some other allowable value
-        type, then this parameter MUST be specified.
-
-        Applications MUST preserve the value data for ``x-name`` and
-        ``iana-token`` values that they don't recognize without attempting
-        to interpret or parse the value data.
+    This method explicitly specifies the value type format for a property value.
 
     Returns:
         The VALUE parameter or the default.
@@ -613,12 +614,18 @@ def _get_value(self: VPROPERTY) -> str:
 
 
 def _set_value(self: VPROPERTY, value: str | None):
-    """Set the VALUE parameter."""
+    """Set the VALUE parameter.
+
+    :meta private:
+    """
     self.params.value = value
 
 
 def _del_value(self: VPROPERTY):
-    """Delete the VALUE parameter."""
+    """Delete the VALUE parameter.
+
+    :meta private:
+    """
     del self.params.value
 
 
@@ -765,6 +772,8 @@ Examples:
 def _get_GAP(prop) -> timedelta | None:  # noqa: N802
     """GAP
 
+    :meta private:
+
     Purpose:
         GAP specifies the length of the gap, positive or negative,
         between two components with a temporal relationship.
@@ -822,7 +831,10 @@ def _get_GAP(prop) -> timedelta | None:  # noqa: N802
 
 
 def _set_GAP(prop, value: timedelta | str | None):  # noqa: N802
-    """Set the GAP parameter as a timedelta."""
+    """Set the GAP parameter as a timedelta.
+
+    :meta private:
+    """
     if value is None:
         prop.params.pop("GAP", None)
         return
@@ -832,7 +844,10 @@ def _set_GAP(prop, value: timedelta | str | None):  # noqa: N802
 
 
 def _del_GAP(prop):  # noqa: N802
-    """Delete the GAP parameter."""
+    """Delete the GAP parameter.
+
+    :meta private:
+    """
     prop.params.pop("GAP", None)
 
 

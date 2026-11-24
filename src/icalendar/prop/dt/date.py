@@ -172,10 +172,10 @@ class vDate(TimeBase):
 
     @classmethod
     def from_xcal_element(cls, element: ElementAdapter) -> date:
-        """Parse xCal from :rfc:`6321`.
+        """Parse an xCal date element according to :rfc:`6321`.
 
         Parameters:
-            element: The xCal element to parse.
+            element: Required. The xCal element to parse.
 
         Returns:
             The date object.
@@ -194,10 +194,11 @@ class vDate(TimeBase):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

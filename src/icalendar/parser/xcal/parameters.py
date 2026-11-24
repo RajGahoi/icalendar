@@ -22,7 +22,7 @@ class XCalParametersParser(XCalParser):
 
     Example:
 
-        The parameter ``element`` can be a ``parameters`` tag as shown below:
+        The parameter ``element`` can be an :term:`IC:parameters` tag as shown below:
 
         .. code-block:: xml
 
@@ -52,8 +52,8 @@ class XCalParametersParser(XCalParser):
 
         Parameters are parsed once and are the same for all
         property values inside a property tag.
-        This method parses the whole ``parameters`` tag collects them
-        and returns them as a :class:`~icalendar.prop.parameters.Parameters` object.
+        This method parses the whole :term:`IC:parameters` tag, collects them,
+        and returns them as a :class:`~icalendar.parser.parameter.Parameters` object.
 
         Returns:
             The parsed parameters.
@@ -102,7 +102,13 @@ class XCalParametersParser(XCalParser):
 
 
 class XCalParameterParser(XCalParser):
-    """A parser for one parameter."""
+    """A parser for one parameter.
+
+    Parameters:
+        element: Required. The element to parse.
+        types_factory: The types factory to use.
+
+    """
 
     def __init__(
         self,
@@ -121,15 +127,15 @@ class XCalParameterParser(XCalParser):
         """Parse one parameter value if present.
 
         Returns:
-            The parsed parameters.
+            The parsed parameter.
 
         Example:
 
-        .. code-block:: xml
+            ..  code-block:: xml
 
-            <tzid>
-                <text>US/Eastern</text>
-            </tzid>
+                <tzid>
+                    <text>US/Eastern</text>
+                </tzid>
         """
         child = self.parse_tag()
         result = child.get_xsd_string()

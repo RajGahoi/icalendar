@@ -352,6 +352,9 @@ The following docstrings items are the most frequently used in icalendar, althou
 Summary
     Docstrings must begin with a one-line summary of the Python object, terminated by a period.
 
+Private flag
+    Use `:meta private: <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#marking-objects-as-public-or-private>`_ after the summary for "private" or :ref:`internal-use-only` methods.
+
 Description
     When the one-line summary is insufficient to describe the Python object, then write an overall description of what it does, without going into details of how it does it.
     Leave implementation details to the code, and optionally inline code comments.

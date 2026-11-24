@@ -26,6 +26,8 @@ if TYPE_CHECKING:
 def _to_midnight(dt: date, tz: tzinfo | None) -> datetime:
     """Convert a date to the datetime at midnight.
 
+    :meta private:
+
     Parameters:
         dt: The date to convert.
         tz: The timezone of the result, or ``None`` for a naive result.
@@ -46,6 +48,8 @@ def _to_period_datetimes(
 ) -> tuple[datetime, datetime | timedelta]:
     """Convert the dates of a period to datetimes.
 
+    :meta private:
+
     :rfc:`5545#section-3.3.9` builds a period from datetimes only, but calendars in the
     wild use dates. A date becomes midnight so that the period can be used
     and written back out.
@@ -55,8 +59,8 @@ def _to_period_datetimes(
     duration.
 
     Parameters:
-        start: The start of the period.
         end_or_duration: The end of the period or its duration.
+        start: The start of the period.
 
     Returns:
         The start and the end or duration, with any date converted.
@@ -161,8 +165,8 @@ class vPeriod(TimeBase):
         else:
             end = end_or_duration
             duration = normalize_pytz(end - start)
-        if start > end:
-            raise ValueError("Start time is greater than end time")
+        if start >= end:
+            raise ValueError("Start time is not before end time")
 
         self.params = Parameters(params or {"value": "PERIOD"})
         # set the timezone identifier
@@ -308,10 +312,11 @@ class vPeriod(TimeBase):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.
@@ -334,7 +339,7 @@ class vPeriod(TimeBase):
             if duration_element is None:
                 raise XCalParsingError("Expected <end> or <duration>", None, element)
             end = vDuration.from_xcal(duration_element).td
-            if end < timedelta(0):
+            if end <= timedelta(0):
                 raise XCalParsingError(
                     "Expected positive duration",
                     duration_element.get_xsd_token(),

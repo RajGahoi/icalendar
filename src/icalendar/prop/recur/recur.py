@@ -30,6 +30,8 @@ if TYPE_CHECKING:
 def _contains_part_separator(value: str) -> bool:
     """Whether a text value of a recurrence rule part contains a separator.
 
+    :meta private:
+
     RECUR has no escaping, so a text value, such as that of ``RSCALE`` or an
     unknown part, cannot contain the part separator ``;`` or the list
     separator ``,``.
@@ -208,18 +210,27 @@ class vRecur(CaselessDict):
 
     @staticmethod
     def _normalize_key(key: str) -> str:
-        """Return the iCalendar name for a recurrence rule part."""
+        """Return the iCalendar name for a recurrence rule part.
+
+        :meta private:
+        """
         return "BYDAY" if key.upper() == "BYWEEKDAY" else key
 
     def _normalize_byweekday(self) -> None:
-        """Normalize the dateutil spelling to the RFC 5545 spelling."""
+        """Normalize the dateutil spelling to the RFC 5545 spelling.
+
+        :meta private:
+        """
         if "BYWEEKDAY" in self:
             if "BYDAY" in self:
                 raise ValueError("BYDAY and BYWEEKDAY cannot both be specified")
             self["BYDAY"] = self.pop("BYWEEKDAY")
 
     def _normalized(self) -> Self:
-        """Return a recurrence with canonical rule-part names."""
+        """Return a recurrence with canonical rule-part names.
+
+        :meta private:
+        """
         return type(self)(self) if "BYWEEKDAY" in self else self
 
     def to_ical(self):
@@ -333,6 +344,12 @@ class vRecur(CaselessDict):
     @classmethod
     def _parse_jcal_part_value(cls, value_type: type, jcal_value: Any) -> VPROPERTY:
         """Parse the jCal value of one recurrence rule part.
+
+        :meta private:
+
+        Parameters:
+            jcal_value: Required. The jCal value to parse.
+            value_type: Required. The value type to parse.
 
         Raises:
             ~error.JCalParsingError: If a text value contains a part separator.
@@ -479,7 +496,10 @@ class vRecur(CaselessDict):
         self.pop("WKST", None)
 
     def __eq__(self, other: object) -> bool:
-        """self == other"""
+        """self == other
+
+        :meta private:
+        """
         if not isinstance(other, vRecur):
             return super().__eq__(other)
         if self.keys() != other.keys():
@@ -500,10 +520,11 @@ class vRecur(CaselessDict):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.
