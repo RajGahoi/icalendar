@@ -855,13 +855,12 @@ GAP = property(_get_GAP, _set_GAP, _del_GAP)
 
 ORDER = string_parameter(
     "ORDER",
-    """Specify the ordering of the property instance it is attached to.
+    """Specify the ordering of the property instance to which it's attached.
 
-    Conformance:
-        This property parameter is specified in :rfc:`9073#section-5.1`.
+    This property parameter is specified in :rfc:`9073#section-5.1`.
 
-        The value is an integer >= 1, with a value of 1
-        meaning the instance appears first.
+    The value is a positive integer. A value of ``1`` means the instance
+    appears first.
     """,
     default=lambda: None,
     convert=int,
