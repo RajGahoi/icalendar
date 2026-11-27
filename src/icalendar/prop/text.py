@@ -175,7 +175,7 @@ class vText(str):
         """The string value of the text."""
         return str(self)
 
-    from icalendar.param import ALTREP, GAP, LANGUAGE, RELTYPE, VALUE
+    from icalendar.param import ALTREP, GAP, LANGUAGE, ORDER, RELTYPE, VALUE
 
     def to_jcal(self, name: str) -> list:
         """The jCal representation of this property according to :rfc:`7265`."""
