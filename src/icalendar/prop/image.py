@@ -14,31 +14,19 @@ if TYPE_CHECKING:
 class Image:
     """An image as URI or BINARY according to :rfc:`7986`.
 
-    Value Type:
-        URI or BINARY -- no default.  The value MUST be data
-        with a media type of "image" or refer to such data.
+    The value must be a URI or binary data with a media type of "image" or
+    refer to such data.
 
-    Description:
-        This property specifies an image for an iCalendar
-        object or a calendar component via a URI or directly with inline
-        data that can be used by calendar user agents when presenting the
-        calendar data to a user.  Multiple properties MAY be used to
-        specify alternative sets of images with, for example, varying
-        media subtypes, resolutions, or sizes.  When multiple properties
-        are present, calendar user agents SHOULD display only one of them,
-        picking one that provides the most appropriate image quality, or
-        display none.  The "DISPLAY" parameter is used to indicate the
-        intended display mode for the image.  The "ALTREP" parameter,
-        defined in :rfc:`5545`, can be used to provide a "clickable" image
-        where the URI in the parameter value can be "launched" by a click
-        on the image in the calendar user agent.
+    This property specifies an image for an iCalendar object or a calendar
+    component via a URI or directly with inline data that can be used by
+    calendar user agents when presenting the calendar data to a user.
 
     Parameters:
-        uri: The URI of the image.
-        b64data: The data of the image, base64 encoded.
-        fmttype: The format type, e.g. ``"image/png"``.
         altrep: Link target of the image.
-        display: The display mode, e.g. ``"BADGE"``.
+        b64data: The data of the image, base64 encoded.
+        display: The display mode, for example, ``"BADGE"``.
+        fmttype: The format type, for example, ``"image/png"``.
+        uri: The URI of the image.
 
     """
 
@@ -79,7 +67,6 @@ class Image:
         altrep: str | None = None,
         display: str | None = None,
     ) -> None:
-        """Create a new image according to :rfc:`7986`."""
         if uri is not None and b64data is not None:
             raise ValueError("Image cannot have both URI and binary data (RFC 7986)")
         if uri is None and b64data is None:

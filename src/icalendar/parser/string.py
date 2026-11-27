@@ -9,6 +9,8 @@ from icalendar.parser_tools import DEFAULT_ENCODING, to_unicode
 def _escape_char(text: str | bytes) -> str:
     r"""Format value according to iCalendar TEXT escaping rules.
 
+    :meta private:
+
     Escapes special characters in text values according to :rfc:`5545#section-3.3.11`
     rules.
     The order of replacements matters to avoid double-escaping.
@@ -58,6 +60,8 @@ def _escape_char(text: str | bytes) -> str:
 def _unescape_char(text: str | bytes) -> str | bytes:
     r"""Unescape iCalendar TEXT values.
 
+    :meta private:
+
     Reverses the escaping applied by ``_escape_char`` according to
     :rfc:`5545#section-3.3.11` TEXT escaping rules.
 
@@ -104,6 +108,8 @@ def _unescape_char(text: str | bytes) -> str | bytes:
 
 def _foldline(line: str, limit: int = 75, fold_sep: str = "\r\n ") -> str:
     r"""Make a string folded as defined in :rfc:`5545#section-3.1`.
+
+    :meta private:
 
     Lines of text SHOULD NOT be longer than 75 octets, excluding the line
     break.  Long content lines SHOULD be split into a multiple line
@@ -152,6 +158,8 @@ def _foldline(line: str, limit: int = 75, fold_sep: str = "\r\n ") -> str:
 def _escape_string(val: str) -> str:
     r"""Escape backslash sequences to URL-encoded hex values.
 
+    :meta private:
+
     Converts backslash-escaped characters to their percent-encoded hex
     equivalents. This is used for parameter parsing to preserve escaped
     characters during processing.
@@ -187,6 +195,8 @@ def _escape_string(val: str) -> str:
 
 def _unescape_string(val: str) -> str:
     r"""Unescape URL-encoded hex values to their original characters.
+
+    :meta private:
 
     Reverses ``_escape_string`` by converting percent-encoded hex values
     back to their original characters. This is used for parameter parsing.

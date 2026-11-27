@@ -18,13 +18,13 @@ class vBroken(vText):
 
     Represents property values that failed to parse with their expected
     type. The raw iCalendar string is preserved for round-trip serialization:
-    ical -> xcal -> ical
+    ical -> xcal -> ical.
     """
 
     default_value: ClassVar[str] = "X-BROKEN"
-    """The default value is x-broken.
+    """The default value is ``x-broken``.
 
-    With this, we can identify broken properties in xCal round-trip.
+    This identifies broken properties during an xCal round-trip.
     """
     __slots__ = ("expected_type", "parse_error", "property_name")
 
@@ -46,6 +46,8 @@ class vBroken(vText):
 
     def __getattr__(self, name: str):
         """Raise BrokenCalendarProperty for attribute access.
+
+        :meta private:
 
         Attributes like ``.dt`` that the expected type would have
         raise :class:`~icalendar.error.BrokenCalendarProperty`

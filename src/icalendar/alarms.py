@@ -44,6 +44,17 @@ class AlarmTime:
     An AlarmTime instance combines an alarm component with its resolved
     trigger time and additional state information, such as acknowledgment
     and snoozing.
+
+    Create an instance of ``AlarmTime`` with any of its parameters.
+
+    Parameters:
+        alarm: Required. The underlying alarm component.
+        trigger: Required. A date or datetime at which to trigger the alarm.
+        acknowledged_until: Datetime in UTC until which
+            the alarm has been acknowledged.
+        parent: Parent component to which the alarm refers.
+        snoozed_until: Datetime in UTC until which
+            the alarm has been snoozed.
     """
 
     def __init__(
@@ -54,17 +65,6 @@ class AlarmTime:
         snoozed_until: datetime | None = None,
         parent: Parent | None = None,
     ) -> None:
-        """Create an instance of ``AlarmTime`` with any of its parameters.
-
-        Parameters:
-            alarm: The underlying alarm component.
-            trigger: A date or datetime at which to trigger the alarm.
-            acknowledged_until: Optional datetime in UTC until which
-                the alarm has been acknowledged.
-            snoozed_until: Optional datetime in UTC until which
-                the alarm has been snoozed.
-            parent: Optional parent component to which the alarm refers.
-        """
         self._alarm = alarm
         self._parent = parent
         self._trigger = trigger
@@ -230,7 +230,6 @@ class Alarms:
     """
 
     def __init__(self, component: Alarm | Event | Todo | None = None) -> None:
-        """Start computing alarm times."""
         self._absolute_alarms: list[Alarm] = []
         self._start_alarms: list[Alarm] = []
         self._end_alarms: list[Alarm] = []
@@ -308,7 +307,10 @@ class Alarms:
     def _add(self, dt: date, td: timedelta) -> date: ...
 
     def _add(self, dt: date, td: timedelta) -> date | datetime:
-        """Add a timedelta to a datetime."""
+        """Add a timedelta to a datetime.
+
+        :meta private:
+        """
         if is_date(dt):
             if td.seconds == 0:
                 return dt + td
@@ -369,7 +371,10 @@ class Alarms:
         )
 
     def _repeat(self, first: datetime, alarm: Alarm) -> Generator[datetime]:
-        """The times when the alarm is triggered relative to start."""
+        """The times when the alarm is triggered relative to start.
+
+        :meta private:
+        """
         yield first  # we trigger at the start
         repeat = alarm.repeat
         duration = alarm.DURATION
@@ -378,7 +383,10 @@ class Alarms:
                 yield self._add(first, duration * i)
 
     def _alarm_time(self, alarm: Alarm, trigger: date) -> AlarmTime:
-        """Create an alarm time with the additional attributes."""
+        """Create an alarm time with the additional attributes.
+
+        :meta private:
+        """
         if getattr(trigger, "tzinfo", None) is None and self._local_tzinfo is not None:
             trigger = normalize_pytz(trigger.replace(tzinfo=self._local_tzinfo))
         return AlarmTime(
@@ -386,7 +394,10 @@ class Alarms:
         )
 
     def _get_absolute_alarm_times(self) -> list[AlarmTime]:
-        """Return a list of absolute alarm times."""
+        """Return a list of absolute alarm times.
+
+        :meta private:
+        """
         return [
             self._alarm_time(alarm, trigger)
             for alarm in self._absolute_alarms
@@ -394,7 +405,10 @@ class Alarms:
         ]
 
     def _get_start_alarm_times(self) -> list[AlarmTime]:
-        """Return a list of alarm times relative to the start of the component."""
+        """Return a list of alarm times relative to the start of the component.
+
+        :meta private:
+        """
         if self._start is None and self._start_alarms:
             raise ComponentStartMissing(
                 "Use Alarms.set_start because at least one alarm is relative to the "
@@ -407,7 +421,10 @@ class Alarms:
         ]
 
     def _get_end_alarm_times(self) -> list[AlarmTime]:
-        """Return a list of alarm times relative to the end of the component."""
+        """Return a list of alarm times relative to the end of the component.
+
+        :meta private:
+        """
         if self._end is None and self._end_alarms:
             raise ComponentEndMissing(
                 "Use Alarms.set_end because at least one alarm is relative to the end "

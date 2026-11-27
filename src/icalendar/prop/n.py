@@ -44,6 +44,11 @@ class vN:
     Semicolons are field separators and are NOT escaped.
     Commas and backslashes within field values ARE escaped per :rfc:`6350`.
 
+    Parameters:
+        fields: Required. Either an :class:`NFields`, a tuple or list of five strings, one per field,
+                or a vCard format string with semicolon-separated fields.
+        params: Property parameters.
+
     Examples:
 
         .. code-block:: pycon
@@ -66,13 +71,6 @@ class vN:
         /,
         params: dict[str, Any] | None = None,
     ) -> None:
-        """Initialize N with five fields or parse from vCard format string.
-
-        Parameters:
-            fields: Either an NFields, tuple, or list of five strings, one per field,
-                    or a vCard format string with semicolon-separated fields
-            params: Optional property parameters
-        """
         if isinstance(fields, str):
             fields = self.from_ical(fields)
         if isinstance(fields, NFields):
@@ -109,11 +107,17 @@ class vN:
         return NFields(*fields)
 
     def __eq__(self, other: object) -> bool:
-        """self == other"""
+        """self == other
+
+        :meta private:
+        """
         return isinstance(other, vN) and self.fields == other.fields
 
     def __repr__(self) -> str:
-        """String representation."""
+        """String representation.
+
+        :meta private:
+        """
         return f"{self.__class__.__name__}({self.fields}, params={self.params})"
 
     @property

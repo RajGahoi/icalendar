@@ -40,7 +40,10 @@ class vUid(vText):
         return self.uid
 
     def __repr__(self) -> str:
-        """repr(self)"""
+        """repr(self)
+
+        :meta private:
+        """
         return f"{self.__class__.__name__}({self.uid!r})"
 
     from icalendar.param import FMTTYPE, LABEL, LINKREL

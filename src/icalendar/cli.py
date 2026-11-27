@@ -15,6 +15,8 @@ from icalendar.cal.event import Event
 def _format_name(address: str) -> str:
     """Format a display name and email from an address string.
 
+    :meta private:
+
     Parameters:
         address: An address object, such as mailto:name@example.com.
 
@@ -31,6 +33,8 @@ def _format_name(address: str) -> str:
 
 def _format_attendees(attendees: list | str | vCalAddress) -> str:
     """Format the list of attendees.
+
+    :meta private:
 
     Parameters:
         attendees: Either a list, a string, or a vCalAddress object.

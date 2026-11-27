@@ -172,10 +172,11 @@ class vInt(int):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            element: The xCal element to parse.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.
@@ -187,10 +188,11 @@ class vInt(int):
 
     @classmethod
     def from_xcal_element(cls, element: ElementAdapter, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            element: The xCal element to parse.
+            element: Required. The xCal element to parse.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.
@@ -209,10 +211,11 @@ class vInt(int):
     @classmethod
     @from_xcal_wrapper
     def from_xcal_in_recur(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            element: The xCal element to parse.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.
@@ -228,7 +231,7 @@ class vInt(int):
 
 
 class vNonNegativeInt(vInt):
-    """This is an integer that is supposed to be at least 0.
+    """This is an integer that is at least 0.
 
     See https://www.rfc-editor.org/rfc/inline-errata/rfc6321.html#btn_3050
     """

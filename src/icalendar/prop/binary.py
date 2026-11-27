@@ -98,11 +98,17 @@ class vBinary:
         return f"data:{quote(media_type, safe='/;=')};base64,{self.base64data}"
 
     def __eq__(self, other: object) -> bool:
-        """self == other"""
+        """self == other
+
+        :meta private:
+        """
         return isinstance(other, vBinary) and self.bytes == other.bytes
 
     def __hash__(self) -> int:
-        """Hash of the vBinary object."""
+        """Hash of the vBinary object.
+
+        :meta private:
+        """
         return hash(self.bytes)
 
     @classmethod
@@ -159,10 +165,11 @@ class vBinary:
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

@@ -27,13 +27,12 @@ _TIME_REFERENCE_DATE = date(2020, 1, 1)
 class TZP:
     """This is the timezone provider proxy.
 
-    If you would like to have another timezone implementation,
+    To use another timezone implementation,
     you can create a new one and pass it to this proxy.
     All of icalendar will then use this timezone implementation.
     """
 
     def __init__(self, provider: str | TZProvider = DEFAULT_TIMEZONE_PROVIDER) -> None:
-        """Create a new timezone implementation proxy."""
         self.use(provider)
 
     def use_pytz(self) -> None:
@@ -49,7 +48,10 @@ class TZP:
         self._use(ZONEINFO())
 
     def _use(self, provider: TZProvider) -> None:
-        """Use a timezone implementation."""
+        """Use a timezone implementation.
+
+        :meta private:
+        """
         self.__tz_cache = {}
         self.__guessed_ids = {}
         self.__provider = provider
@@ -213,6 +215,8 @@ class TZP:
 
     def _lookup_ids(self, tz_id: str) -> Iterator[tuple[str, bool]]:
         """Yield ``(id, is_global_guess)`` tuples to try, best match first.
+
+        :meta private:
 
         1.  The cleaned ID, without any surrounding ``/``.
         2.  The Olson name of a Windows timezone (for example,

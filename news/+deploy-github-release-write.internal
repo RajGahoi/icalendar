@@ -1,0 +1,1 @@
+Added ``contents: write`` to ``deploy-github-release`` so it can create GitHub releases. Shipped in 778ca8c2 during the v8.0.0a1 release. @SashankBhamidi

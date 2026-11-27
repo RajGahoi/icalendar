@@ -161,6 +161,17 @@ class vTime(TimeBase):
         """Whether this time is UTC."""
         return self.params.is_utc() or is_utc(self.dt)
 
+    @property
+    def ical_value(self) -> time:
+        """Return the time of day as a :class:`datetime.time`.
+
+        .. seealso::
+
+            :rfc:`5545#section-3.3.12` for the TIME value type.
+
+        """
+        return self.dt
+
     @staticmethod
     def from_ical(ical: str, timezone: str | None | tzinfo = None) -> time:
         """Convert an ical string into a time.
@@ -282,10 +293,11 @@ class vTime(TimeBase):
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

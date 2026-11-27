@@ -1,1 +1,0 @@
-Removed the untested ``__main__`` benchmark block from ``icalendar.cal.lazy``. Drafted with Claude Sonnet 5, reviewed by me. @SemTiOne

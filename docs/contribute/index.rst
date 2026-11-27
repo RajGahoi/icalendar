@@ -2,6 +2,11 @@
 Contribute
 ==========
 
+..  important::
+
+    Until further notice, maintainers alone are unable to respond to the high volume of new pull requests.
+    To help improve this situation, it's strongly recommended that you follow :ref:`peer-reviews` instead of opening a new pull request.
+
 This guide describes how to contribute to icalendar.
 
 A key purpose around icalendar is to foster a warm and welcoming space for people to learn, grow, and contribute.
@@ -30,8 +35,7 @@ Triage and review
 
 -   Comment on and resolve issues.
 -   Triage open issues and `pull requests <https://github.com/PyCalendar/icalendar/pulls>`_.
--   Review, comment on, and make suggestions to change a pull request.
-    See the GitHub documentation `Reviewing proposed changes in a pull request <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request>`_.
+-   :ref:`Give a peer review <peer-reviews>`.
 -   Reproduce an issue and add a comment with your findings.
 
 Documentation
@@ -148,10 +152,12 @@ If you use AI in your work:
 -   You shall be held accountable for your AI-generated content.
 
 
+..  _ai-abuse:
+
 AI abuse
 ````````
 
-You may not abuse AI to generate a pull request that is disruptive to the icalendar community or does not adhere to :ref:`responsible-ai-use` described in the previous subsection.
+You may not abuse AI to generate a pull request, issue, or comment that is disruptive to the icalendar community or does not adhere to :ref:`responsible-ai-use` described in the previous subsection.
 Examples of such abuse and irresponsible use include the following actions.
 
 -   You claim no responsibility for the output of AI generated content.
@@ -159,6 +165,9 @@ Examples of such abuse and irresponsible use include the following actions.
 -   Your pull request plagiarizes copyrighted or other material to which you have no legal claim.
 -   You ignore or don't respond to feedback.
 -   The GitHub account is itself an AI agent.
+-   Never copy-paste AI generated content verbatim.
+    It's verbose, unhelpful, and wastes the readers' time.
+-   You cite anything that is recorded or duplicates features in the GitHub user interface, including test results and counts in CI checks, code changes that can be seen in the diff viewer, and commit messages.
 
 
 Report suspected violations
@@ -168,6 +177,79 @@ To report a suspected violation of this AI policy, see the `Reporting an issue <
 The maintainers will investigate and collect information from various sources, including but not limited to the use of automated GitHub workflows to identify suspected AI use.
 The maintainers may close pull requests without providing feedback that they deem to be spam, AI slop, abuse, or that do not comply with :ref:`pull request requirements <pull-request-requirements>`.
 The maintainers may also take further action, including suspend, ban, or report GitHub users, as described in Python Calendaring Ecosystem's `Code of Conduct <https://pycal.org/code-of-conduct/>`_.
+
+
+..  _peer-reviews:
+
+Peer reviews
+------------
+
+..  important::
+
+    Until further notice, maintainers alone are unable to respond to the high volume of new pull requests.
+    Read this section for information about how you can help improve the situation.
+
+A peer review is when you look at an open pull request of another contributor, and make comments and suggestions to improve its quality.
+You'll help your colleagues, learn from one another, and gain valuable communication and collaboration skills that every programming job requires.
+It will also help maintainers handle high priority items in a timely manner, such as addressing security reports, making releases, and conducting final code and documentation reviews.
+
+You can give a peer review to a colleague or request one from a colleague.
+
+To request a peer review, you can either:
+
+-   Mention your colleague in a comment by typing the ``@`` symbol followed by their username ``@github-username``.
+-   From the pull request's :guilabel:`Reviewers` panel click on the gear icon, and start typing a username and select them from the list.
+    Users who aren't a member of the PyCalendar organization won't appear.
+
+
+Good peer review
+````````````````
+
+A good peer review includes the following steps.
+
+..  steps::
+
+    ..  step::
+
+        Find an open pull request that interests you, and open it.
+
+    ..  step::
+
+        Click its :guilabel:`Files changed` tab.
+
+    ..  step::
+
+        Add questions, comments, or suggestions.
+        You can also provide code to replace their change.
+        See the GitHub documentation `Starting a review <https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request#starting-a-review>`_.
+
+    ..  step::
+
+        Ensure that the change log entry complies with :ref:`change-log`.
+
+    ..  step::
+
+        Ensure that the documentation renders correctly—including the change log, docstrings, and narrative documentation—according to :ref:`pull-request-previews`.
+
+
+If you use AI, follow our :ref:`artificial-intelligence-policy`.
+Thoughtful suggestions are especially helpful.
+
+..  note::
+
+    Some IDEs have pull request interfaces that replicate the features of GitHub's web interface.
+
+
+Poor peer review
+````````````````
+
+A poor peer review is unwanted and unnecessary.
+Examples of poor peer reviews include the following.
+
+-   Creating a single comment in the pull request's :guilabel:`Conversation` tab.
+-   Copy paste AI-generated content without you reviewing and editing it.
+    See :ref:`responsible-ai-use`.
+-   Restating the obvious.
 
 
 .. _issue-requirements:
@@ -200,6 +282,7 @@ When submitting your pull request, complete the description template on GitHub, 
 #.  Add a test which proves your fix and passes.
 #.  Run all tests to ensure your changes don't break any existing functionality.
 #.  :doc:`Add or edit documentation <documentation/index>`, both as docstrings to be rendered in the :doc:`API reference documentation <../reference/api/icalendar>` and narrative documentation, as necessary.
+#.  Request a :ref:`peer review <peer-reviews>`.
 
 The maintainers may close pull requests without providing feedback that they deem to be spam, AI slop, abuse, or that do not comply with pull request requirements.
 The maintainers may also take further action, including suspend, ban, or report GitHub users, as described in Python Calendaring Ecosystem's `Code of Conduct <https://pycal.org/code-of-conduct/>`_.
@@ -298,12 +381,14 @@ Write a good change log entry
 The content of this file must be on a single line and include the following.
 
 -   A *brief* message that summarizes the changes in your contribution.
--   Use :ref:`reStructuredText markup cross-references <markup-examples>` to link to relevant RFCs, API usage and Python objects, and other references.
+-   Use :ref:`reStructuredText markup cross-references <markup-examples>` to link to relevant RFCs, API usage and Python objects, and other documentation references.
 -   A *brief* disclosure of AI use, per icalendar's :ref:`responsible-ai-use` policy, if applicable.
--   An attribution to yourself, in the format of ``@github_username``, at the end of the entry.
+-   An attribution to yourself, in the format of ``:user:`github_username```, at the end of the entry.
+    This will render as a link to your GitHub Sponsors page, or if it doesn't exist, it will redirect to your GitHub profile page.
 
 Write a good change log entry with the following guidance.
 
+-   Follow the :doc:`documentation/style-guide`.
 -   Use a narrative format, in the past tense, proper English spelling and grammar, and inline markup as needed.
 -   Write your change log entry for its appropriate audience.
 
@@ -313,7 +398,6 @@ Write a good change log entry with the following guidance.
 -   If you fix a bug, write what was broken and is now fixed.
     You should not write *how* you fixed it.
 -   If you add or change a feature or public API, write a summary of previous behavior, what it does now, and how to use it.
--   Refer to narrative documentation as needed.
 -   After opening a pull request and the CI check :guilabel:`docs/readthedocs.org:icalendar` succeeds, inspect the rendered change log for accuracy and functional links.
 
     -   Click the link :guilabel:`docs/readthedocs.org:icalendar` in the list of CI checks.
@@ -325,13 +409,27 @@ The following text is an example of a good change log entry, placed inside :file
 
 ..  code-block:: rst
 
-    Created a :meth:`~icalendar.prop.recur.weekday.vWeekday.ical_value` property for the :class:`~icalendar.prop.recur.weekday.vWeekday` component, mirroring the existing pattern on :class:`~icalendar.prop.boolean.vBoolean`. @mvanhorn
+    Created a :meth:`~icalendar.prop.recur.weekday.vWeekday.ical_value` property for the :class:`~icalendar.prop.recur.weekday.vWeekday` component, mirroring the existing pattern on :class:`~icalendar.prop.boolean.vBoolean`. :user:`mvanhorn`
 
 The following would be a poor change log entry.
 
 ..  code-block:: rst
 
     Fix #123456 by chaning config of file [did_not_read_this_guide]
+
+..  _check-change-log:
+
+Check change log
+````````````````
+
+..  include:: ../_include/rtd-preview-navigate.inc
+
+Once you're in the pull request preview:
+
+-   Navigate to :menuselection:`Reference guides --> Change log`.
+-   Search for your username for the rendered change log entry, and inspect it for accuracy and functional links.
+
+Read the Docs' `visual diff <https://docs.readthedocs.com/platform/stable/visual-diff.html>`_ feature might help find what you've changed.
 
 
 Set up for development

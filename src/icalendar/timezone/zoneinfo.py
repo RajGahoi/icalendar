@@ -49,7 +49,10 @@ class ZONEINFO(TZProvider):
 
     @property
     def _available_timezones(self) -> set:
-        """Return available timezones, initializing lazily on first access."""
+        """Return available timezones, initializing lazily on first access.
+
+        :meta private:
+        """
         if self._available_timezones_cache is None:
             with self._init_lock:
                 # Double-check after acquiring lock
@@ -110,7 +113,10 @@ class ZONEINFO(TZProvider):
                 raise ValueError(f"Invalid iCalendar VTIMEZONE: {e}") from e
 
     def _create_timezone(self, tz: Timezone) -> tzinfo:
-        """Create a timezone and maybe fail"""
+        """Create a timezone and maybe fail.
+
+        :meta private:
+        """
         file = StringIO(tz.to_ical().decode("UTF-8", "replace"))
         return tzical(file).get()
 

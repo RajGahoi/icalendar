@@ -20,16 +20,16 @@ if TYPE_CHECKING:
 
 
 class XCalPropertiesParser(XCalParser):
-    """A parser for <properties>.
+    """A parser for :term:`IC:properties`.
 
     Parameters:
-        element: The xCal element to parse.
-        component: The component to add properties to.
-        types_factory: The types factory to use.
+        component: Required. The component to add properties to.
+        element: Required. The xCal element to parse.
+        types_factory: Required. The types factory to use.
 
     Example:
 
-        The parameter ``element`` can be a ``properties`` tag as shown below:
+        The parameter ``element`` can be a <properties> element as shown below:
 
         .. code-block:: xml
 
@@ -72,7 +72,7 @@ class XCalPropertiesParser(XCalParser):
         self._component = component
 
     def parse_properties(self):
-        """Parse properties until finished.
+        """Parse multiple properties until finished.
 
         After this call, all properties inside the parser's ``element`` parameter
         have been added to the ``component`` parameter.
@@ -81,14 +81,14 @@ class XCalPropertiesParser(XCalParser):
         Raises:
             ~icalendar.error.XCalParsingError: If the provided xCal is invalid.
             ~icalendar.parser.xcal.base.InvalidParserState:
-                If all properties have been parsed a property value type
-                did not parse anything.
+                If all properties have been parsed, a property value type
+                parsed nothing.
         """
         while not self.is_finished():
             self.parse_property()
 
     def parse_property(self):
-        """Parse one property that has not been parsed, yet.
+        """Parse one property that hasn't been parsed yet.
 
         This function only parses one property inside the parser's ``element``
         parameter and adds it to the ``component`` parameter.
@@ -97,12 +97,12 @@ class XCalPropertiesParser(XCalParser):
         Raises:
             ~icalendar.error.XCalParsingError: If the provided xCal is invalid.
             ~icalendar.parser.xcal.base.InvalidParserState:
-                If all properties have been parsed a property value type
-                did not parse anything.
+                If all properties have been parsed, a property value type
+                parsed nothing.
 
         Example:
 
-            The example below shows such a property that gets parsed by one call
+            The example below shows a property that gets parsed by one call
             of this method:
 
             .. code-block:: xml
@@ -156,17 +156,18 @@ class XCalPropertyParser(XCalParameterParser):
     This parses the value type and additionally the parameters.
 
     Parameters:
-        element: The xCal element to parse.
+        element: Required. The xCal element to parse.
         types_factory: The types factory to use.
-            If ``None`` is passed, the default TypesFactory is used.
+            If ``None`` is passed, the default
+            :class:`~icalendar.prop.factory.TypesFactory` is used.
 
     Raises:
         ~icalendar.error.XCalParsingError: If the provided xCal is invalid.
 
     Examples:
 
-        The parameter ``element`` can be a ``prodid`` tag with a single ``text``
-        value, as shown below:
+        The parameter ``element`` can be a <prodid> element with a single
+        ``text`` value, as shown below:
 
         .. code-block:: xml
 
@@ -174,7 +175,7 @@ class XCalPropertyParser(XCalParameterParser):
                 <text>-//Example Inc.//Example Client//EN</text>
             </prodid>
 
-        Some tags, such as ``rdate`` and ``categories`` can contain
+        Some elements, such as <rdate> and <categories>, can contain
         multiple values. This is illustrated in the example below:
 
         .. code-block:: xml
@@ -184,9 +185,9 @@ class XCalPropertyParser(XCalParameterParser):
                 <text>Home</text>
             </categories>
 
-        Additionally to the value tag, a property can contain parameters.
+        Within an element, a property can contain parameters.
         These parameters apply to all values.
-        The example below shows a ``date-time`` value in the timezone
+        The example below shows a <date-time> value in the timezone
         ``US/Eastern``.
 
         .. code-block:: xml
@@ -215,15 +216,14 @@ class XCalPropertyParser(XCalParameterParser):
         self._parameters = self.initialize_parameters()
 
     def initialize_parameters(self) -> Parameters:
-        """Parse the parameters if present.
+        """Parse the parameters, if present.
 
-        They only need to be parsed once.
-        This parses the ``parameters`` tag inside
-        of the property.
+        Parameters need to be parsed only once.
+        This method parses the <parameters> element inside the property.
 
         Returns:
-            If there are parameters, they are parsed returned.
-            Otherwise, an empty :class:`~icalendar.prop.parameters.Parameters`
+            If there are parameters, they are returned as parsed.
+            Otherwise, an empty :class:`~icalendar.parser.parameter.Parameters`
             object is returned.
 
         Raises:
@@ -241,25 +241,25 @@ class XCalPropertyParser(XCalParameterParser):
 
         Returns:
             The parsed parameters.
-            They are identical for all property values.
+            Parameters are identical for all property values.
         """
         return self._parameters
 
     def parse_property_value(self) -> VPROPERTY:
-        """Parse one property value that has not been parsed, yet.
+        """Parse one property value that hasn't been parsed yet.
 
         Returns:
-            The parsed property value
+            The parsed property value.
 
         Raises:
             ~icalendar.error.XCalParsingError: If the provided xCal is invalid.
             ~icalendar.parser.xcal.base.InvalidParserState:
                 If all properties have been parsed or a property value
-                type did not parse anything.
+                parsed nothing.
 
         Example:
 
-            The example below shows a ``text`` tag that this method
+            The example below shows a <text> element that this method
             can parse into a :class:`~icalendar.prop.text.vText`.
 
             .. code-block:: xml

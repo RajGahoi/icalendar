@@ -36,7 +36,7 @@ def _nested_jcal(depth: int) -> list:
 
 
 def _nesting_depth(component: Component) -> int:
-    """Count how many levels of single-child nesting ``component`` has."""
+    """Count the levels of single-child nesting ``component`` has."""
     depth = 0
     while component.subcomponents:
         depth += 1

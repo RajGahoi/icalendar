@@ -462,6 +462,14 @@ class Alarm(Component):
         duration: timedelta | None,
         repeat: int | None,
     ) -> None:
+        """Apply a repeating duration to an alarm.
+
+        :meta private:
+
+        Parameters:
+            duration: The duration to repeat.
+            repeat: The number of times to repeat the duration.
+        """
         if duration is not None or repeat is not None:
             if duration is None or repeat is None:
                 raise InvalidCalendar(

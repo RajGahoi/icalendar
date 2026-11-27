@@ -67,8 +67,74 @@ Glossary
         For example, the calendar component can specify an event, a to-do, a journal entry, time zone information, free/busy time information, or an alarm.
 
         All calendar components start with the letter "V".
-        For example, "VEVENT" refers to the event calendar component.
+        For example, VEVENT refers to the event calendar component.
 
         ..  seealso::
 
             :rfc:`5545#section-3.6`
+
+    iCalendar object
+        As defined by :rfc:`5545#section-3.4`, an iCalendar object consists of a pair of delimiter strings—one defining its start (``BEGIN:VCALENDAR``) and the other its end (``END:VCALENDAR``), with both having trailing ``CRLF``\ s—and a body consisting of a sequence of calendar properties and one or more calendar components.
+
+        Typically, an :term:`iCalendar stream` contains a single iCalendar object.
+        However, multiple iCalendar objects can be sequentially grouped together in an iCalendar stream.
+
+    iCalendar stream
+        At the top level of the iCalendar object model is an iCalendar stream.
+        An iCalendar stream can contain one or more iCalendar objects.
+        
+        ..  seealso::
+        
+            :term:`IC:icalendar`
+
+    IC:icalendar
+        In xCal, an IC:icalendar XML element representation of an :term:`iCalendar stream`.
+
+        ..  seealso::
+
+            :rfc:`6321#section-3.2`
+
+    IC:vcalendar
+        In xCal, an IC:vcalendar XML element representation of a single :term:`iCalendar object` in an :term:`iCalendar stream`.
+
+        ..  seealso::
+
+            :rfc:`6321#section-3.2`
+
+    IC:components
+        In :term:`xCal`, an IC:components element is an XML element that contains zero or more :term:`component element`\ s.
+
+        ..  seealso::
+
+            :rfc:`6321#section-3.2`
+
+    component element
+        In :term:`xCal`, a component element represents the :term:`iCalendar` :term:`component`.
+        Its name is the same as that in iCalendar, but lowercase.
+
+        ..  seealso::
+
+            :rfc:`6321#section-3.3`
+
+    IC:properties
+        In xCal, an IC:property is an XML element representation of an :term:`iCalendar` :term:`property`.
+        Its name is the same as that in iCalendar, but lowercase.
+
+        ..  seealso::
+
+            :rfc:`6321#section-3.4`
+
+    IC:parameters
+        In xCal, an IC:parameter is an XML element representation of an :term:`iCalendar` :term:`parameter`.
+        Its name is the same as that in iCalendar, but lowercase.
+
+        ..  seealso::
+
+            :rfc:`6321#section-3.5`
+
+    XSD
+    XML Schema Definition
+    XML Schema Definition Language
+        The `XML Schema Definition Language <https://www.w3.org/TR/xmlschema11-2/>`__ (XSD) defines facilities for defining datatypes to be used in XML Schemas as well as other XML specifications.
+        The names of datatypes typically begin with either ``xs:`` or ``xsd:``.
+        The xCal specification :rfc:`6321` uses the latter, and, therefore, so does icalendar.

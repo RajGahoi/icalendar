@@ -15,7 +15,10 @@ class Enum(_Enum):
     """Enum class that can be pickled."""
 
     def __reduce_ex__(self, _p):
-        """For pickling."""
+        """For pickling.
+
+        :meta private:
+        """
         return self.__class__, (self._value_,)
 
 
@@ -26,6 +29,8 @@ class StrEnum(str, Enum):
 
     def __str__(self) -> str:
         """Convert to a string.
+
+        :meta private:
 
         This is needed when we set the value directly in components.
         """

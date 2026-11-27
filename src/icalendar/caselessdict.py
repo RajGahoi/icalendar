@@ -79,26 +79,26 @@ class CaselessDict(OrderedDict[str, _VT]):
     their original case. Keys can be provided as ``str`` or ``bytes``.
     They are converted to Unicode via :func:`~icalendar.parser_tools.to_unicode`,
     then uppercased before storage.
+
+    Parameters:
+        *args: Positional arguments passed to :class:`~collections.OrderedDict`.
+        **kwargs: Keyword arguments passed to :class:`~collections.OrderedDict`.
+
+    Example:
+
+        Create a new ``CaselessDict`` and normalize existing keys to uppercase.
+
+        ..  code-block:: pycon
+
+            >>> from icalendar.caselessdict import CaselessDict
+            >>> d = CaselessDict(summary="Meeting")
+            >>> d["SUMMARY"]
+            'Meeting'
+            >>> "summary" in d
+            True
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Parameters:
-            *args: Positional arguments passed to :class:`~collections.OrderedDict`.
-            **kwargs: Keyword arguments passed to :class:`~collections.OrderedDict`.
-
-        Example:
-
-            Create a new ``CaselessDict`` and normalize existing keys to uppercase.
-
-            ..  code-block:: pycon
-
-                >>> from icalendar.caselessdict import CaselessDict
-                >>> d = CaselessDict(summary="Meeting")
-                >>> d["SUMMARY"]
-                'Meeting'
-                >>> "summary" in d
-                True
-        """
         super().__init__(*args, **kwargs)
         for key, value in self.items():
             key_upper = to_unicode(key).upper()
@@ -111,6 +111,8 @@ class CaselessDict(OrderedDict[str, _VT]):
     def __getitem__(self, key: str) -> _VT:
         """Get the item from the ``CaselessDict`` instance by
         ``key``, case-insensitively.
+
+        :meta private:
 
         Parameters:
             key: The key to look up, case-insensitively.
@@ -127,6 +129,8 @@ class CaselessDict(OrderedDict[str, _VT]):
     def __setitem__(self, key: str, value: _VT) -> None:
         """Set a (key, value) pair, storing the key in uppercase.
 
+        :meta private:
+
         Parameters:
             key: The key of the pair, case-insensitive.
             value: The value to associate with the key.
@@ -136,6 +140,8 @@ class CaselessDict(OrderedDict[str, _VT]):
 
     def __delitem__(self, key: str) -> None:
         """Delete a (key, value) pair by its case-insensitive key.
+
+        :meta private:
 
         Parameters:
             key: The key to delete, case-insensitively.
@@ -148,6 +154,8 @@ class CaselessDict(OrderedDict[str, _VT]):
 
     def __contains__(self, key: object) -> bool:
         """Check whether a key exists in the mapping, case-insensitively.
+
+        :meta private:
 
         Parameters:
             key: The key to check case-insensitively.
@@ -253,6 +261,8 @@ class CaselessDict(OrderedDict[str, _VT]):
     def __repr__(self) -> str:
         """Return a string representation of the dictionary.
 
+        :meta private:
+
         Returns:
             A string in the form ``CaselessDict({...})``.
         """
@@ -260,6 +270,8 @@ class CaselessDict(OrderedDict[str, _VT]):
 
     def __eq__(self, other: object) -> bool:
         """Check equality with another dictionary.
+
+        :meta private:
 
         Two ``CaselessDict`` instances are equal if they contain the same
         (key, value) pairs after uppercasing keys. Comparison with a regular
@@ -277,6 +289,8 @@ class CaselessDict(OrderedDict[str, _VT]):
 
     def __ne__(self, other: object) -> bool:
         """Check inequality with another dictionary.
+
+        :meta private:
 
         Parameters:
             other: The object to compare.

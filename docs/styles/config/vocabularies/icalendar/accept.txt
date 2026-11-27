@@ -4,11 +4,13 @@ __new__
 Args
 backported
 contentline
+datatypes?
 (?i)datetime
 defusedxml
 dicts
 [Dd]ocstrings?
 fuzzer
+GHSAs?
 Hanoka
 icalendar(\.[a-z]+)+
 iCal
@@ -27,6 +29,7 @@ python\-icalendar
 Repology
 recur.recur
 reformats
+retag(ged|ging|s)?
 RFCs?
 SARIF
 sphinx_copybutton

@@ -104,7 +104,6 @@ class LazySubcomponent:
     """
 
     def __init__(self, name: str, parser: ComponentIcalParser) -> None:
-        """Initialize the lazy subcomponent with the raw data."""
         self._name = name
         self._parser = parser
         self._component: Component | None = None

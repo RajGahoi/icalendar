@@ -1,4 +1,6 @@
 name: Check news fragments filenames, build documentation, check links, spelling, grammar, and style
+permissions:
+  contents: read
 on:
   push:
     branches:

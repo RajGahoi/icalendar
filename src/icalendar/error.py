@@ -118,6 +118,8 @@ class GloballyUniqueTZIDGuessed(UserWarning):
 def _repr_index(index: str | int) -> str:
     """Create a JSON compatible representation for the index.
 
+    :meta private:
+
     Parameters:
         index: It is either a dict key (string) or a list position (integer).
 
@@ -131,7 +133,15 @@ def _repr_index(index: str | int) -> str:
 
 
 class JCalParsingError(InvalidCalendar):
-    """Could not parse a part of the JCal."""
+    """Could not parse a part of the JCal.
+
+    Parameters:
+        message: Required. A description of the error that occurred while parsing.
+        parser: The parser class or its name where the error occurred.
+        path: The location in the jCal structure where the error occurred.
+        value: The value which caused the error, if available.
+
+    """
 
     _default_value = object()
     path: list[str | int]
@@ -150,14 +160,6 @@ class JCalParsingError(InvalidCalendar):
         path: list[str | int] | None | str | int = None,
         value: object = _default_value,
     ) -> None:
-        """Create a new JCalParsingError.
-
-        Parameters:
-            message: A description of the error that occurred while parsing.
-            parser: The parser class or its name where the error occurred.
-            path: The location in the jCal structure where the error occurred.
-            value: The value which caused the error, if available.
-        """
         self.path = self._get_path(path)
         if not isinstance(parser, str):
             parser = parser.__name__
@@ -199,7 +201,10 @@ class JCalParsingError(InvalidCalendar):
 
     @staticmethod
     def _get_path(path: list[str | int] | None | str | int) -> list[str | int]:
-        """Return the path as a list."""
+        """Return the path as a list.
+
+        :meta private:
+        """
         if path is None:
             path = []
         elif not isinstance(path, list):
@@ -363,7 +368,13 @@ class JCalParsingError(InvalidCalendar):
 
 
 class XCalParsingError(InvalidCalendar):
-    """Could not parse a part of the xCal."""
+    """Could not parse a part of the xCal.
+
+    Parameters:
+        element: Required. The XML element that caused the error.
+        message: Required. A description of the error that occurred while parsing.
+        value: Required. The value that caused the error.
+    """
 
     message: str
     """A description of the error that occurred while parsing."""
@@ -380,13 +391,6 @@ class XCalParsingError(InvalidCalendar):
         value: str | None,
         element: ElementAdapter,
     ) -> None:
-        """Create a new XCalParsingError.
-
-        Parameters:
-            message: A description of the error that occurred while parsing.
-            value: The value that caused the error.
-            element: The XML element that caused the error.
-        """
         self.value = value
         self.element = element
         self.short_message = message

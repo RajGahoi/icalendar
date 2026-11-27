@@ -46,6 +46,6 @@ Therefore, icalendar is safe to use its configured built-in XML parsing.
 Developers can `open an issue <https://github.com/PyCalendar/icalendar/issues/new?template=empty-issue.md>`_ to use a different XML parser.
 The parser is configurable through the setting :func:`icalendar.config.parse_xml`.
 
-.. seealso::
+..  seealso::
 
-    :mod:`icalendar.tests.rfc_6321_xcal.test_xml_parser`
+    :file:`icalendar.tests.rfc_6321_xcal.test_xml_parser`

@@ -10,6 +10,7 @@ from icalendar.error import JCalParsingError
 from icalendar.parser import Parameters
 from icalendar.parser.xcal.string import xsd_float_to_string
 from icalendar.parser.xcal.wrapper import from_xcal_wrapper
+from icalendar.prop.float import _float_to_ical
 
 if TYPE_CHECKING:
     from icalendar.compatibility import Self
@@ -17,54 +18,40 @@ if TYPE_CHECKING:
 
 
 class vGeo:
-    """Geographic Position
+    """Geographic position.
 
-    Property Name:
-        GEO
+    This property specifies information related to the global position for the
+    activity specified by a calendar component.
 
-    Purpose:
-        This property specifies information related to the global
-        position for the activity specified by a calendar component.
+    This property value specifies latitude and longitude, in that order. The
+    acceptable ranges are ``-90.000000`` to ``+90.000000`` for latitude and
+    ``-180.000000`` to ``+180.000000`` for longitude. The longitude and
+    latitude values may be specified up to six decimal places, which will allow
+    for accuracy to within one meter of geographical position.
 
-    Value Type:
-        FLOAT.  The value MUST be two SEMICOLON-separated FLOAT values.
+    This property can be specified in VEVENT or VTODO calendar components.
 
-    Property Parameters:
-        IANA and non-standard property parameters can be specified on
-        this property.
+    Raises:
+        ValueError: if geo is not a tuple of (latitude, longitude).
 
-    Conformance:
-        This property can be specified in "VEVENT" or "VTODO"
-        calendar components.
+    Examples:
 
-    Description:
-        This property value specifies latitude and longitude,
-        in that order (i.e., "LAT LON" ordering).  The longitude
-        represents the location east or west of the prime meridian as a
-        positive or negative real number, respectively.  The longitude and
-        latitude values MAY be specified up to six decimal places, which
-        will allow for accuracy to within one meter of geographical
-        position.  Receiving applications MUST accept values of this
-        precision and MAY truncate values of greater precision.
-
-        Example:
-
-        .. code-block:: ics
+        ..  code-block:: ics
 
             GEO:37.386013;-122.082932
 
         Parse vGeo:
 
-        .. code-block:: pycon
+        ..  code-block:: pycon
 
             >>> from icalendar.prop import vGeo
             >>> geo = vGeo.from_ical('37.386013;-122.082932')
             >>> geo
             (37.386013, -122.082932)
 
-        Add a geo location to an event:
+        Add a geographic location to an event:
 
-        .. code-block:: pycon
+        ..  code-block:: pycon
 
             >>> from icalendar import Event
             >>> event = Event()
@@ -90,11 +77,6 @@ class vGeo:
         /,
         params: dict[str, Any] | None = None,
     ) -> None:
-        """Create a new vGeo from a tuple of (latitude, longitude).
-
-        Raises:
-            ValueError: if geo is not a tuple of (latitude, longitude)
-        """
         try:
             latitude, longitude = (geo[0], geo[1])
             latitude = float(latitude)
@@ -108,7 +90,7 @@ class vGeo:
         self.params = Parameters(params)
 
     def to_ical(self) -> str:
-        return f"{self.latitude};{self.longitude}"
+        return f"{_float_to_ical(self.latitude)};{_float_to_ical(self.longitude)}"
 
     @property
     def ical_value(self) -> tuple[float, float]:
@@ -130,11 +112,17 @@ class vGeo:
         return isinstance(other, vGeo) and self.to_ical() == other.to_ical()
 
     def __hash__(self) -> int:
-        """Hash of the vGeo object."""
+        """Hash of the vGeo object.
+
+        :meta private:
+        """
         return hash((self.latitude, self.longitude))
 
     def __repr__(self) -> str:
-        """repr(self)"""
+        """repr(self)
+
+        :meta private:
+        """
         return f"{self.__class__.__name__}(({self.latitude}, {self.longitude}))"
 
     def to_jcal(self, name: str) -> list:
@@ -181,10 +169,11 @@ class vGeo:
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            element: The xCal element to parse.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.

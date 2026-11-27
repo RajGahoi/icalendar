@@ -48,7 +48,10 @@ _DECLARED_ENCODING_OF_BYTES = re.compile(
 
 
 def _decode(data: bytes) -> str | bytes:
-    """Decode XML bytes with the encoding of their XML declaration, if they have one."""
+    """Decode XML bytes with the encoding of their XML declaration, if they have one.
+
+    :meta private:
+    """
     match = _DECLARED_ENCODING_OF_BYTES.match(data)
     if match:
         with suppress(LookupError, UnicodeDecodeError):
@@ -66,7 +69,7 @@ class vXml(vText):
     Use :attr:`element` to get the XML element.
 
     In xCal, the XML property does not exist.
-    Instead the XML elements are directly copied into the ``<properties>`` element,
+    Instead the XML elements are directly copied into the :term:`IC:properties` element,
     see :rfc:`6321#section-4.1`.
     :mod:`~xml.etree.ElementTree` chooses the namespace prefixes there.
 
@@ -145,6 +148,8 @@ class vXml(vText):
     def _parse(self) -> Element:
         """Parse the text of this value as XML.
 
+        :meta private:
+
         Raises:
             xml.etree.ElementTree.ParseError: If the value is not XML.
         """
@@ -219,7 +224,7 @@ class vXml(vText):
 
         All other property classes in :mod:`icalendar.prop` add children to the ``element`` parameter.
         :class:`vXml` is special because it holds a single XML 1.0 element per :rfc:`6321#section-4.1`.
-        Such an element resides directly inside the ``<properties>`` tag.
+        Such an element resides directly inside the IC:properties element.
         Because of this, the tag, attributes, text, and children of ``element``
         are replaced with the XML 1.0 element contained in this object.
 
@@ -283,6 +288,8 @@ class vXml(vText):
     def _get_normal_form(self) -> tuple | str:
         """What equality compares: the XML elements, or the text.
 
+        :meta private:
+
         The text is compared if the value is not XML, or if it has a document
         type, which could make the XML much larger than the text.
         The normal form is computed once.
@@ -296,6 +303,8 @@ class vXml(vText):
 
     def _get_elements(self) -> tuple:
         """The elements of the XML in document order, without recursion.
+
+        :meta private:
 
         Each element has its tag with the namespace, its sorted attributes,
         its text, its tail, and its number of children.
@@ -315,7 +324,10 @@ class vXml(vText):
         return tuple(elements)
 
     def __eq__(self, other: object) -> bool:
-        """Compare the XML of two vXml values."""
+        """Compare the XML of two vXml values.
+
+        :meta private:
+        """
         if not isinstance(other, vXml):
             return NotImplemented
         return (
@@ -324,12 +336,18 @@ class vXml(vText):
         )
 
     def __ne__(self, other: object) -> bool:
-        """The opposite of ``==``."""
+        """The opposite of ``==``.
+
+        :meta private:
+        """
         result = self.__eq__(other)
         return result if result is NotImplemented else not result
 
     def __hash__(self) -> int:
-        """Hash what two vXml values compare."""
+        """Hash what two vXml values compare.
+
+        :meta private:
+        """
         return hash(self._get_normal_form())
 
     @classmethod
@@ -343,6 +361,8 @@ def _preserve_indentation_of_xcal_extension_properties(
     xcal: Element,
 ) -> Iterator[None]:
     """Keep the whitespace in the elements of XML properties in xCal.
+
+    :meta private:
 
     :func:`xml.etree.ElementTree.indent` changes the whitespace in elements.
     In this context, the elements of XML properties are replaced

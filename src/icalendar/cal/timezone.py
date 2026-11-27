@@ -75,7 +75,9 @@ class Timezone(Component):
     def _extract_offsets(component: TimezoneDaylight | TimezoneStandard, tzname: str):
         """Extract offsets and transition times from a VTIMEZONE component.
 
-        Args:
+        :meta private:
+
+        Parameters:
             component: A STANDARD or DAYLIGHT timezone component.
             tzname: The name of the timezone.
 
@@ -134,6 +136,8 @@ class Timezone(Component):
     @staticmethod
     def _make_unique_tzname(tzname: str, tznames: set[str]) -> str:
         """Make a unique tzname and add it to ``tznames``.
+
+        :meta private:
 
         Parameters:
             tzname: The candidate timezone name.

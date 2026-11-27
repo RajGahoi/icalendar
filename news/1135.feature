@@ -1,1 +1,0 @@
-Added xCal support per :rfc:`6321`, including ``to_xcal()`` and ``from_xcal()`` on all property types and components. @niccokunzmann

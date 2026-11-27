@@ -64,7 +64,10 @@ class vCategory:
         return ical.split(",")
 
     def __eq__(self, other: object) -> bool:
-        """self == other"""
+        """self == other
+
+        :meta private:
+        """
         if isinstance(other, vCategory):
             return self.cats == other.cats
         if isinstance(other, list):
@@ -72,11 +75,17 @@ class vCategory:
         return NotImplemented
 
     def __hash__(self) -> int:
-        """Hash of the vCategory object."""
+        """Hash of the vCategory object.
+
+        :meta private:
+        """
         return hash(tuple(self.cats))
 
     def __repr__(self) -> str:
-        """String representation."""
+        """String representation.
+
+        :meta private:
+        """
         return f"{self.__class__.__name__}({self.cats}, params={self.params})"
 
     def to_jcal(self, name: str) -> list:
@@ -128,10 +137,11 @@ class vCategory:
     @classmethod
     @from_xcal_wrapper
     def from_xcal(cls, parser: XCalParser, params: Parameters) -> Self:
-        """Parse xCal from :rfc:`6321`.
+        """Parse xCal according to :rfc:`6321`.
 
         Parameters:
-            xml: The XML to parse or a parser.
+            parser: Required. The xCal to parse or a parser.
+            params: Required. The parameters of the xCal element.
 
         Raises:
             ~error.XCalParsingError: If the provided xCal is invalid.
